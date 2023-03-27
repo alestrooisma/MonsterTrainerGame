@@ -41,9 +41,13 @@ public class LayeredView implements InputProcessor, Disposable {
         Gdx.gl.glClearColor(clearColor.r, clearColor.g, clearColor.b, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // Update and render layers
+        // Update layers
         for (Layer layer : layers) {
             layer.update(dt);
+        }
+
+        // Render layers
+        for (Layer layer : layers) {
             layer.render();
         }
     }

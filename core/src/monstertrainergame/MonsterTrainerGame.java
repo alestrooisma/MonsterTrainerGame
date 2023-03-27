@@ -27,7 +27,8 @@ public class MonsterTrainerGame extends ApplicationAdapter {
 
         // Create the view
         resources = loadResources();
-        view = new View();
+        view = new View(battle.getBounds());
+        populateView(battle);
 
         // Set up an input event listener
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
@@ -44,16 +45,17 @@ public class MonsterTrainerGame extends ApplicationAdapter {
         MonsterType mudcrawler = new MonsterType("Mudcrawler");
 
         Array<FieldedMonster> player = new Array<>(3);
-        player.add(new FieldedMonster(new Monster(firedragon), 650, 650));
-        player.add(new FieldedMonster(new Monster(seawyrm), 630, 680));
-        player.add(new FieldedMonster(new Monster(serpent), 670, 610));
+        player.add(new FieldedMonster(new Monster(firedragon), 600, 600));
+        player.add(new FieldedMonster(new Monster(seawyrm), 600, 750));
+        player.add(new FieldedMonster(new Monster(serpent), 700, 600));
 
         Array<FieldedMonster> opponent = new Array<>(3);
         player.add(new FieldedMonster(new Monster(mudwalker), 750, 750));
-        player.add(new FieldedMonster(new Monster(mudcrawler), 770, 750));
-        player.add(new FieldedMonster(new Monster(mudcrawler), 750, 770));
+        player.add(new FieldedMonster(new Monster(mudcrawler), 800, 750));
+        player.add(new FieldedMonster(new Monster(mudcrawler), 750, 800));
 
-        return new Battle(player, opponent);
+        Rectangle bounds = new Rectangle(320, 320, 800, 800);
+        return new Battle(bounds, player, opponent);
     }
 
     private static ResourceManager loadResources() {
@@ -64,6 +66,15 @@ public class MonsterTrainerGame extends ApplicationAdapter {
         resources.add("Mudwalker", createSkin("giant-mudcrawler.png", 37, 21, 8, 7, 52, 48));
         resources.add("Mudcrawler", createSkin("mudcrawler.png", 35, 18, 16, 11, 38, 23));
         return  resources;
+    }
+
+    private void populateView(Battle battle) {
+        for (FieldedMonster monster : battle.getFieldedMonsters()) {
+            view.add(monster);
+        }
+        for (FieldedMonster monster : battle.getOpponents()) {
+            view.add(monster);
+        }
     }
 
     private static Skin createSkin(String filename, float offsetX, float offsetY, float boxX, float boxY, float boxWidth, float boxHeight) {

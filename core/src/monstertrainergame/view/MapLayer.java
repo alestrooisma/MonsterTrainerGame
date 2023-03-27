@@ -1,12 +1,11 @@
 package monstertrainergame.view;
 
-import aetherdriven.view.Layer;
-import com.badlogic.gdx.InputProcessor;
+import aetherdriven.view.AbstractLayer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.HexagonalTiledMapRenderer;
 
-public class MapLayer implements Layer {
+public class MapLayer extends AbstractLayer {
     // Owned
     private final HexagonalTiledMapRenderer renderer;
     // Not owned
@@ -18,16 +17,7 @@ public class MapLayer implements Layer {
     }
 
     @Override
-    public void resize(int width, int height) {
-    }
-
-    @Override
-    public void update(float dt) {
-    }
-
-    @Override
     public void render() {
-        camera.update(); // First layer to be rendered, so updating the camera here...
         renderer.setView(camera);
         renderer.render();
     }
@@ -35,10 +25,5 @@ public class MapLayer implements Layer {
     @Override
     public void dispose() {
         renderer.dispose();
-    }
-
-    @Override
-    public InputProcessor getInputProcessor() {
-        return DEFAULT_INPUT_PROCESSOR;
     }
 }
