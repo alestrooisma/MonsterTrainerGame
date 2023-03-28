@@ -38,6 +38,11 @@ public class MonsterTrainerGame extends ApplicationAdapter {
     }
 
     private static Battle createBattle() {
+        // Battlefield size
+        Rectangle bounds = new Rectangle(18, 36, 48 * 54 - 18, 24 * 72 - 36);
+        float cx = (48 * 54 + 18) / 2f;
+        float cy = (24 * 72 + 36) / 2f;
+
         MonsterType firedragon = new MonsterType("Fire Dragon");
         MonsterType seawyrm = new MonsterType("Sea Wyrm");
         MonsterType serpent = new MonsterType("Serpent");
@@ -45,16 +50,14 @@ public class MonsterTrainerGame extends ApplicationAdapter {
         MonsterType mudcrawler = new MonsterType("Mudcrawler");
 
         Array<FieldedMonster> player = new Array<>(3);
-        player.add(new FieldedMonster(new Monster(firedragon), 600, 600));
-        player.add(new FieldedMonster(new Monster(seawyrm), 600, 750));
-        player.add(new FieldedMonster(new Monster(serpent), 700, 600));
+        player.add(new FieldedMonster(new Monster(firedragon), cx - 100, cy - 100));
+        player.add(new FieldedMonster(new Monster(seawyrm), cx - 220, cy - 50));
+        player.add(new FieldedMonster(new Monster(serpent), cx - 100, cy - 150));
 
         Array<FieldedMonster> opponent = new Array<>(3);
-        player.add(new FieldedMonster(new Monster(mudwalker), 750, 750));
-        player.add(new FieldedMonster(new Monster(mudcrawler), 800, 750));
-        player.add(new FieldedMonster(new Monster(mudcrawler), 750, 800));
-
-        Rectangle bounds = new Rectangle(320, 320, 800, 800);
+        player.add(new FieldedMonster(new Monster(mudwalker), cx + 100, cy + 25));
+        player.add(new FieldedMonster(new Monster(mudcrawler), cx + 80, cy + 75));
+        player.add(new FieldedMonster(new Monster(mudcrawler), cx + 155, cy + 5));
         return new Battle(bounds, player, opponent);
     }
 

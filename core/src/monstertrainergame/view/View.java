@@ -13,8 +13,10 @@ import monstertrainergame.model.FieldedMonster;
 
 public class View implements Disposable {
     // Owned
-    private final LayeredView view;
     private final Projection projection;
+    private final CameraController cameraController;
+    private final LayeredView view;
+    // Not owned
     private final BattleLayer battleLayer;
 
     public View(Rectangle bounds) {
@@ -24,7 +26,7 @@ public class View implements Disposable {
         projection = new BattleProjection(viewport);
 
         // Create camera controller
-        CameraController cameraController = new CameraController(projection, bounds);
+        cameraController = new CameraController(projection, bounds);
         cameraController.center();
 
         // Create the layered view
@@ -50,6 +52,7 @@ public class View implements Disposable {
 
     public void resize(int width, int height) {
         projection.update(width, height);
+        cameraController.snap();
         view.resize(width, height);
     }
 
