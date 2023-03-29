@@ -24,6 +24,7 @@ import monstertrainergame.model.events.MoveEvent;
 public class BattleLayer extends AbstractLayer {
     // Owned
     private final InputProcessor inputProcessor = new BattleLayerInputProcessor();
+    private final TweenEngine engine = new TweenEngine();
     private final ReverseYComparator reverseYComparator = new ReverseYComparator();
     private final ShapeRenderer renderer = new ShapeRenderer();
     private final SpriteBatch batch = new SpriteBatch();
@@ -54,6 +55,7 @@ public class BattleLayer extends AbstractLayer {
 
     @Override
     public void update(float dt) {
+        // Handle camera controls
         final float v = 150;
         if (Gdx.input.isKeyPressed(Keys.LEFT)) {
             cameraController.move(-v*dt, 0);
@@ -68,6 +70,9 @@ public class BattleLayer extends AbstractLayer {
             cameraController.move(0, v*dt);
         }
         projection.getCamera().update();
+
+        // Update animations
+        engine.update(dt);
     }
 
     @Override
@@ -187,7 +192,8 @@ public class BattleLayer extends AbstractLayer {
         public void handleMoveEvent(MoveEvent event) {
             Element element = findElement(event.getMonster());
             if (element != null) {
-                projection.worldToPixelCoordinates(event.getDestination(), element.getPosition());
+                projection.worldToPixelCoordinates(event.getDestination(), pixel);
+                engine.add(element.getPosition(), pixel, 300);
             }
         }
     }
