@@ -25,4 +25,17 @@ public class Battle {
     public Array<FieldedMonster> getOpponents() {
         return opponents;
     }
+
+    public FieldedMonster getPlayerMonsterAt(float x, float y) {
+        return getMonsterAt(x, y, fieldedMonsters);
+    }
+
+    private FieldedMonster getMonsterAt(float x, float y, Array<FieldedMonster> monsters) {
+        for (FieldedMonster monster : monsters) {
+            if (monster.occupies(x, y)) {
+                return monster;
+            }
+        }
+        return null;
+    }
 }

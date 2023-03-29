@@ -4,10 +4,10 @@ import aetherdriven.view.LayeredView;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import monstertrainergame.controller.BattleController;
 import monstertrainergame.controller.CameraController;
 import monstertrainergame.model.FieldedMonster;
 
@@ -19,14 +19,14 @@ public class View implements Disposable {
     // Not owned
     private final BattleLayer battleLayer;
 
-    public View(Rectangle bounds) {
+    public View(BattleController controller) {
         // Create a camera
         OrthographicCamera camera = new OrthographicCamera();
         Viewport viewport = new ScreenViewport(camera);
         projection = new BattleProjection(viewport);
 
         // Create camera controller
-        cameraController = new CameraController(projection, bounds);
+        cameraController = new CameraController(projection, controller.getBattle().getBounds());
         cameraController.center();
 
         // Create the layered view
@@ -38,7 +38,7 @@ public class View implements Disposable {
         view.add(mapLayer);
 
         // Add the battle layer
-        battleLayer = new BattleLayer(projection, cameraController);
+        battleLayer = new BattleLayer(controller, projection, cameraController);
         view.add(battleLayer);
     }
 

@@ -8,6 +8,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
+import monstertrainergame.controller.BattleController;
 import monstertrainergame.model.Battle;
 import monstertrainergame.model.FieldedMonster;
 import monstertrainergame.model.Monster;
@@ -27,7 +28,7 @@ public class MonsterTrainerGame extends ApplicationAdapter {
 
         // Create the view
         resources = loadResources();
-        view = new View(battle.getBounds());
+        view = new View(new BattleController(battle));
         populateView(battle);
 
         // Set up an input event listener
@@ -43,11 +44,11 @@ public class MonsterTrainerGame extends ApplicationAdapter {
         float cx = (48 * 54 + 18) / 2f;
         float cy = (24 * 72 + 36) / 2f;
 
-        MonsterType firedragon = new MonsterType("Fire Dragon");
-        MonsterType seawyrm = new MonsterType("Sea Wyrm");
-        MonsterType serpent = new MonsterType("Serpent");
-        MonsterType mudwalker = new MonsterType("Mudwalker");
-        MonsterType mudcrawler = new MonsterType("Mudcrawler");
+        MonsterType firedragon = new MonsterType("Fire Dragon", 48);
+        MonsterType seawyrm = new MonsterType("Sea Wyrm", 33);
+        MonsterType serpent = new MonsterType("Serpent", 30);
+        MonsterType mudwalker = new MonsterType("Mudwalker", 26);
+        MonsterType mudcrawler = new MonsterType("Mudcrawler", 19);
 
         Array<FieldedMonster> player = new Array<>(3);
         player.add(new FieldedMonster(new Monster(firedragon), cx - 100, cy - 100));

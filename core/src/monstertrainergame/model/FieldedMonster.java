@@ -22,4 +22,11 @@ public class FieldedMonster {
     public Vector2 getPosition() {
         return position;
     }
+
+    public boolean occupies(float x, float y) {
+        float radius = monster.getType().getRadius();
+        float dx = x - position.x;
+        float dy = y - position.y;
+        return dx * dx + dy * dy <= radius * radius;
+    }
 }
