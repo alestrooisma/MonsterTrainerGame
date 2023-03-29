@@ -6,8 +6,10 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
@@ -64,8 +66,15 @@ public class BattleLayer extends AbstractLayer {
 
     @Override
     public void render() {
-        // Prepare drawing
         batch.setProjectionMatrix(projection.getCamera().combined);
+        renderer.setProjectionMatrix(projection.getCamera().combined);
+
+        renderDebugLines();
+        renderElements();
+    }
+
+    private void renderElements() {
+        // Prepare drawing
         batch.begin();
 
         // Render all elements (with decoration)
@@ -84,17 +93,37 @@ public class BattleLayer extends AbstractLayer {
     private void renderIndicator(Element e) {
         // Finalize batch drawing and prepare shape rendering
         batch.end();
-        renderer.setProjectionMatrix(projection.getCamera().combined);
         renderer.begin(ShapeRenderer.ShapeType.Line);
+        renderer.setColor(Color.WHITE);
 
         // Render indicator
-        float radius = e.getMonster().getType().getRadius();
-        projection.worldToPixelCoordinates(radius, radius, pixel);
-        renderer.ellipse(e.getPosition().x - pixel.x / 2, e.getPosition().y - pixel.y / 2, pixel.x, pixel.y);
+        renderFootprint(e);
 
         // Finalize shape rendering and resume batch drawing
         renderer.end();
         batch.begin();
+    }
+
+    private void renderFootprint(Element e) {
+        float radius = e.getMonster().getType().getRadius();
+        projection.worldToPixelCoordinates(radius, radius, pixel);
+        renderer.ellipse(e.getPosition().x - pixel.x / 2, e.getPosition().y - pixel.y / 2, pixel.x, pixel.y);
+    }
+
+    private void renderDebugLines() {
+        // Prepare drawing
+        renderer.begin(ShapeRenderer.ShapeType.Line);
+        renderer.setColor(Color.PINK);
+
+        // Render debug lines for all elements
+        for (Element e : elements) {
+            Rectangle bounds = e.getSkin().getBounds();
+            renderer.rect(e.getPosition().x + bounds.x, e.getPosition().y + bounds.y, bounds.width, bounds.height);
+            renderFootprint(e);
+        }
+
+        // Finalize drawing
+        renderer.end();
     }
 
     @Override
