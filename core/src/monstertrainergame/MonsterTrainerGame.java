@@ -56,9 +56,9 @@ public class MonsterTrainerGame extends ApplicationAdapter {
         player.add(new FieldedMonster(new Monster(serpent), cx - 100, cy - 150));
 
         Array<FieldedMonster> opponent = new Array<>(3);
-        player.add(new FieldedMonster(new Monster(mudwalker), cx + 100, cy + 25));
-        player.add(new FieldedMonster(new Monster(mudcrawler), cx + 80, cy + 75));
-        player.add(new FieldedMonster(new Monster(mudcrawler), cx + 155, cy + 5));
+        opponent.add(new FieldedMonster(new Monster(mudwalker), cx + 100, cy + 25));
+        opponent.add(new FieldedMonster(new Monster(mudcrawler), cx + 80, cy + 75));
+        opponent.add(new FieldedMonster(new Monster(mudcrawler), cx + 155, cy + 5));
         return new Battle(bounds, player, opponent);
     }
 
