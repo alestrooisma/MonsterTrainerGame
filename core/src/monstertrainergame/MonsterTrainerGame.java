@@ -13,6 +13,8 @@ import monstertrainergame.model.Battle;
 import monstertrainergame.model.FieldedMonster;
 import monstertrainergame.model.Monster;
 import monstertrainergame.model.MonsterType;
+import monstertrainergame.model.events.EventDispatcher;
+import monstertrainergame.model.events.ModelUpdater;
 import monstertrainergame.view.ResourceManager;
 import monstertrainergame.view.Skin;
 import monstertrainergame.view.View;
@@ -25,6 +27,7 @@ public class MonsterTrainerGame extends ApplicationAdapter {
     public void create() {
         // Create the model
         Battle battle = createBattle();
+        EventDispatcher.create(new ModelUpdater());
 
         // Create the view
         resources = loadResources();

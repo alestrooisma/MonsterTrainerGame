@@ -16,6 +16,10 @@ import com.badlogic.gdx.utils.Array;
 import java.util.Comparator;
 import monstertrainergame.controller.BattleController;
 import monstertrainergame.controller.CameraController;
+import monstertrainergame.model.FieldedMonster;
+import monstertrainergame.model.events.EventDispatcher;
+import monstertrainergame.model.events.EventListener;
+import monstertrainergame.model.events.MoveEvent;
 
 public class BattleLayer extends AbstractLayer {
     // Owned
@@ -37,6 +41,7 @@ public class BattleLayer extends AbstractLayer {
         this.controller = controller;
         this.projection = projection;
         this.cameraController = cameraController;
+        EventDispatcher.instance.register(new BattleLayerEventListener());
     }
 
     public void add(Element e) {
@@ -139,6 +144,15 @@ public class BattleLayer extends AbstractLayer {
         return inputProcessor;
     }
 
+    public Element findElement(FieldedMonster monster) {
+        for (Element e : elements) {
+            if (e.getMonster() == monster) {
+                return e;
+            }
+        }
+        return null;
+    }
+
     private class BattleLayerInputProcessor extends InputAdapter {
         @Override
         public boolean touchUp(int screenX, int screenY, int pointer, int button) {
@@ -164,6 +178,17 @@ public class BattleLayer extends AbstractLayer {
                 debug = !debug; // Don't return true so other layers can enable debug mode too
             }
             return false;
+        }
+    }
+
+    private class BattleLayerEventListener implements EventListener {
+
+        @Override
+        public void handleMoveEvent(MoveEvent event) {
+            Element element = findElement(event.getMonster());
+            if (element != null) {
+                projection.worldToPixelCoordinates(event.getDestination(), element.getPosition());
+            }
         }
     }
 

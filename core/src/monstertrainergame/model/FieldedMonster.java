@@ -23,6 +23,10 @@ public class FieldedMonster {
         return position;
     }
 
+    public void setPosition(Vector2 position) {
+        this.position.set(position);
+    }
+
     public boolean occupies(float x, float y) {
         float radius = monster.getType().getRadius();
         float dx = x - position.x;

@@ -29,7 +29,7 @@ public class ResourceManager implements Disposable {
 
     public static ResourceManager create() {
         if (instance != null) {
-            throw new IllegalStateException("A ResourceContainer instance already exists");
+            throw new IllegalStateException("A ResourceManager instance already exists");
         }
         instance = new ResourceManager();
         return instance;

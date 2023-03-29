@@ -26,8 +26,21 @@ public class Battle {
         return opponents;
     }
 
+    public FieldedMonster getMonsterAt(float x, float y) {
+        FieldedMonster monster = getPlayerMonsterAt(x, y);
+        if (monster != null) {
+            return monster;
+        } else {
+            return getOpponentMonsterAt(x, y);
+        }
+    }
+
     public FieldedMonster getPlayerMonsterAt(float x, float y) {
         return getMonsterAt(x, y, fieldedMonsters);
+    }
+
+    public FieldedMonster getOpponentMonsterAt(float x, float y) {
+        return getMonsterAt(x, y, opponents);
     }
 
     private FieldedMonster getMonsterAt(float x, float y, Array<FieldedMonster> monsters) {
