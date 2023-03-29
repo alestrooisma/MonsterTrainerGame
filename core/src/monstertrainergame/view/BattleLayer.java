@@ -110,7 +110,7 @@ public class BattleLayer extends AbstractLayer {
     private void renderFootprint(Element e) {
         float radius = e.getMonster().getType().getRadius();
         projection.worldToPixelCoordinates(radius, radius, pixel);
-        renderer.ellipse(e.getPosition().x - pixel.x / 2, e.getPosition().y - pixel.y / 2, pixel.x, pixel.y);
+        renderer.ellipse(e.getPosition().x - pixel.x, e.getPosition().y - pixel.y, pixel.x * 2, pixel.y * 2);
     }
 
     private void renderDebugLines() {

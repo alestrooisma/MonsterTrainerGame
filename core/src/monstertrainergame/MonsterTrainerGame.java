@@ -45,9 +45,9 @@ public class MonsterTrainerGame extends ApplicationAdapter {
         float cy = (24 * 72 + 36) / 2f;
 
         MonsterType firedragon = new MonsterType("Fire Dragon", 48);
-        MonsterType seawyrm = new MonsterType("Sea Wyrm", 33);
-        MonsterType serpent = new MonsterType("Serpent", 30);
-        MonsterType mudwalker = new MonsterType("Mudwalker", 26);
+        MonsterType seawyrm = new MonsterType("Sea Wyrm", 30);
+        MonsterType serpent = new MonsterType("Serpent", 28);
+        MonsterType mudwalker = new MonsterType("Mudwalker", 24);
         MonsterType mudcrawler = new MonsterType("Mudcrawler", 19);
 
         Array<FieldedMonster> player = new Array<>(3);
@@ -64,7 +64,7 @@ public class MonsterTrainerGame extends ApplicationAdapter {
 
     private static ResourceManager loadResources() {
         ResourceManager resources = ResourceManager.create();
-        resources.add("Fire Dragon", createSkin("fire-dragon.png", 94, 72, 8, 46, 96, 150));
+        resources.add("Fire Dragon", createSkin("fire-dragon.png", 94, 72, 8, 46, 140, 154));
         resources.add("Sea Wyrm", createSkin("seaserpent.png", 34, 26, 4, 2, 66, 70));
         resources.add("Serpent", createSkin("water-serpent.png", 36, 20, 6, 7, 60, 53));
         resources.add("Mudwalker", createSkin("giant-mudcrawler.png", 37, 21, 8, 7, 52, 48));
