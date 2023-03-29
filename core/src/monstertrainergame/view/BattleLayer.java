@@ -24,6 +24,7 @@ public class BattleLayer extends AbstractLayer {
     private final ShapeRenderer renderer = new ShapeRenderer();
     private final SpriteBatch batch = new SpriteBatch();
     private final Array<Element> elements = new Array<>();
+    private boolean debug = false;
     // Not owned
     private final BattleController controller;
     private final Projection projection;
@@ -69,7 +70,9 @@ public class BattleLayer extends AbstractLayer {
         batch.setProjectionMatrix(projection.getCamera().combined);
         renderer.setProjectionMatrix(projection.getCamera().combined);
 
-        renderDebugLines();
+        if (debug) {
+            renderDebugLines();
+        }
         renderElements();
     }
 
@@ -153,6 +156,14 @@ public class BattleLayer extends AbstractLayer {
             }
 
             return true;
+        }
+
+        @Override
+        public boolean keyUp(int keycode) {
+            if (keycode == Input.Keys.F12) {
+                debug = !debug; // Don't return true so other layers can enable debug mode too
+            }
+            return false;
         }
     }
 
