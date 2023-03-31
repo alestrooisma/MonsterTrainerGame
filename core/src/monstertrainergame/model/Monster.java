@@ -10,4 +10,8 @@ public class Monster {
     public MonsterType getType() {
         return type;
     }
+
+    public float getMaxMovementRange() {
+        return type.getMaxMovementRange();
+    }
 }

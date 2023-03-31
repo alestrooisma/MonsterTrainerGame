@@ -28,7 +28,7 @@ public class MonsterTrainerGame extends ApplicationAdapter {
     public void create() {
         // Create the model
         Battle battle = createBattle();
-        EventDispatcher.create(new ModelUpdater());
+        EventDispatcher.create(new ModelUpdater(battle));
 
         // Create the view
         resources = loadResources();
@@ -51,11 +51,11 @@ public class MonsterTrainerGame extends ApplicationAdapter {
         float cx = (48 * 54 + 18) / 50f;
         float cy = (24 * 72 + 36) / 50f;
 
-        MonsterType firedragon = new MonsterType("Fire Dragon", 48/25f);
-        MonsterType seawyrm = new MonsterType("Sea Wyrm", 30/25f);
-        MonsterType serpent = new MonsterType("Serpent", 28/25f);
-        MonsterType mudwalker = new MonsterType("Mudwalker", 24/25f);
-        MonsterType mudcrawler = new MonsterType("Mudcrawler", 19/25f);
+        MonsterType firedragon = new MonsterType("Fire Dragon", 48/25f, 5);
+        MonsterType seawyrm = new MonsterType("Sea Wyrm", 30/25f, 6);
+        MonsterType serpent = new MonsterType("Serpent", 28/25f, 7);
+        MonsterType mudwalker = new MonsterType("Mudwalker", 24/25f, 4);
+        MonsterType mudcrawler = new MonsterType("Mudcrawler", 19/25f, 3);
 
         Array<FieldedMonster> player = new Array<>(3);
         player.add(new FieldedMonster(new Monster(firedragon), cx - 4, cy - 4));

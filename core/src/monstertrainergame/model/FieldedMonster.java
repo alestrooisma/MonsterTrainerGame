@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 public class FieldedMonster {
     private final Monster monster;
     private final Vector2 position;
+    private float distanceMovedThisTurn = 0;
 
     public FieldedMonster(Monster monster, float x, float y) {
         this(monster, new Vector2(x, y));
@@ -23,8 +24,17 @@ public class FieldedMonster {
         return position;
     }
 
-    public void setPosition(Vector2 position) {
-        this.position.set(position);
+    public float getRemainingMovementRange() {
+        return Math.max(0, monster.getMaxMovementRange() - distanceMovedThisTurn);
+    }
+
+    public void moveTo(Vector2 destination) {
+        distanceMovedThisTurn += this.position.sub(destination).len();
+        this.position.set(destination);
+    }
+
+    public void endTurn() {
+        distanceMovedThisTurn = 0;
     }
 
     public boolean occupies(float x, float y) {

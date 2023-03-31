@@ -98,7 +98,7 @@ public class BattleLayer extends AbstractLayer {
         elements.sort(reverseYComparator);
         for (Element e : elements) {
             if (e.getMonster() == controller.getSelected()) {
-                renderIndicator(e);
+                renderIndicators(e);
             }
             e.draw(batch);
         }
@@ -107,14 +107,16 @@ public class BattleLayer extends AbstractLayer {
         batch.end();
     }
 
-    private void renderIndicator(Element e) {
+    private void renderIndicators(Element e) {
         // Finalize batch drawing and prepare shape rendering
         batch.end();
         renderer.begin(ShapeRenderer.ShapeType.Line);
-        renderer.setColor(Color.WHITE);
 
-        // Render indicator
+        // Render indicators
+        renderer.setColor(Color.WHITE);
         renderFootprint(e);
+        renderer.setColor(Color.GRAY);
+        renderMovementRange(e);
 
         // Finalize shape rendering and resume batch drawing
         renderer.end();
@@ -122,9 +124,16 @@ public class BattleLayer extends AbstractLayer {
     }
 
     private void renderFootprint(Element e) {
-        float radius = e.getMonster().getType().getRadius();
-        projection.worldToPixelCoordinates(radius, radius, pixel);
-        renderer.ellipse(e.getPosition().x - pixel.x, e.getPosition().y - pixel.y, pixel.x * 2, pixel.y * 2);
+        renderEllipse(e.getPosition(), e.getMonster().getType().getRadius());
+    }
+
+    private void renderMovementRange(Element e) {
+        renderEllipse(e.getPosition(), e.getMonster().getRemainingMovementRange());
+    }
+
+    private void renderEllipse(Vector3 center, float radiusInWorldCoordinates) {
+        projection.worldToPixelCoordinates(radiusInWorldCoordinates, radiusInWorldCoordinates, pixel);
+        renderer.ellipse(center.x - pixel.x, center.y - pixel.y, pixel.x * 2, pixel.y * 2);
     }
 
     private void renderDebugLines() {

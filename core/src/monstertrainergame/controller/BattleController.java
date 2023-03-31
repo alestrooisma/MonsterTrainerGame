@@ -14,7 +14,6 @@ public class BattleController {
     private final Battle battle;
     private FieldedMonster selected = null;
     private FieldedMonster target = null;
-    // Utilities
     private final Vector2 destination = new Vector2();
 
     public BattleController(Battle battle) {
@@ -52,7 +51,13 @@ public class BattleController {
 
     private boolean canMoveTo(float x, float y) {
         FieldedMonster monster = battle.getMonsterAt(x, y);
-        return selected != null && (monster == null || monster == selected);
+        return selected != null && (monster == null || monster == selected) && isWithinRange(x, y);
+    }
+
+    private boolean isWithinRange(float x, float y) {
+        float distance2 = selected.getPosition().dst2(x, y);
+        float remaining = selected.getRemainingMovementRange();
+        return distance2 < remaining * remaining;
     }
 
     public void cancel() {
