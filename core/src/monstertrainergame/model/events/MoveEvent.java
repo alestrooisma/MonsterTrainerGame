@@ -3,7 +3,7 @@ package monstertrainergame.model.events;
 import com.badlogic.gdx.math.Vector2;
 import monstertrainergame.model.FieldedMonster;
 
-public class MoveEvent extends Event {
+public class MoveEvent implements Event {
     // Not owned
     private final FieldedMonster monster;
     private final Vector2 destination = new Vector2();

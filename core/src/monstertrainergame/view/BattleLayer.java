@@ -17,9 +17,11 @@ import java.util.Comparator;
 import monstertrainergame.controller.BattleController;
 import monstertrainergame.controller.CameraController;
 import monstertrainergame.model.FieldedMonster;
+import monstertrainergame.model.events.EndTurnEvent;
 import monstertrainergame.model.events.EventDispatcher;
 import monstertrainergame.model.events.EventListener;
 import monstertrainergame.model.events.MoveEvent;
+import monstertrainergame.model.events.StartTurnEvent;
 
 public class BattleLayer extends AbstractLayer {
     // Owned
@@ -30,6 +32,7 @@ public class BattleLayer extends AbstractLayer {
     private final SpriteBatch batch = new SpriteBatch();
     private final Array<Element> elements = new Array<>();
     private boolean debug = false;
+    private boolean playerTurn = false;
     // Not owned
     private final BattleController controller;
     private final Projection projection;
@@ -161,7 +164,7 @@ public class BattleLayer extends AbstractLayer {
     private class BattleLayerInputProcessor extends InputAdapter {
         @Override
         public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-            if (pointer != 0) {
+            if (pointer != 0 || !playerTurn) {
                 return false;
             }
 
@@ -179,14 +182,32 @@ public class BattleLayer extends AbstractLayer {
 
         @Override
         public boolean keyUp(int keycode) {
+            // Debug mode
             if (keycode == Input.Keys.F12) {
                 debug = !debug; // Don't return true so other layers can enable debug mode too
             }
+ 
+            // End turn
+            if (playerTurn && keycode == Keys.ENTER) {
+                controller.endTurn();
+                return true;
+            }
+
             return false;
         }
     }
 
-    private class BattleLayerEventListener implements EventListener {
+    private class BattleLayerEventListener implements EventListener, TweenEngine.Callback {
+
+        @Override
+        public void handleStartTurnEvent(StartTurnEvent event) {
+            engine.add(this, null);
+        }
+
+        @Override
+        public void handleEndTurnEvent(EndTurnEvent event) {
+            playerTurn = false;
+        }
 
         @Override
         public void handleMoveEvent(MoveEvent event) {
@@ -195,6 +216,11 @@ public class BattleLayer extends AbstractLayer {
                 projection.worldToPixelCoordinates(event.getDestination(), pixel);
                 engine.add(element.getPosition(), pixel, 300);
             }
+        }
+
+        @Override
+        public void callback(Object payload) {
+            playerTurn = true;
         }
     }
 

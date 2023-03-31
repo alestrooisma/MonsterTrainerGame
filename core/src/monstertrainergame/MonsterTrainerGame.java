@@ -15,6 +15,7 @@ import monstertrainergame.model.Monster;
 import monstertrainergame.model.MonsterType;
 import monstertrainergame.model.events.EventDispatcher;
 import monstertrainergame.model.events.ModelUpdater;
+import monstertrainergame.model.events.StartTurnEvent;
 import monstertrainergame.view.ResourceManager;
 import monstertrainergame.view.Skin;
 import monstertrainergame.view.View;
@@ -39,6 +40,9 @@ public class MonsterTrainerGame extends ApplicationAdapter {
         inputMultiplexer.addProcessor(view.getView());
         inputMultiplexer.addProcessor(new InputHandler());
         Gdx.input.setInputProcessor(inputMultiplexer);
+
+        // Start the first turn
+        EventDispatcher.instance.dispatch(new StartTurnEvent());
     }
 
     private static Battle createBattle() {

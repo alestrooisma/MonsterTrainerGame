@@ -3,9 +3,11 @@ package monstertrainergame.controller;
 import com.badlogic.gdx.math.Vector2;
 import monstertrainergame.model.Battle;
 import monstertrainergame.model.FieldedMonster;
+import monstertrainergame.model.events.EndTurnEvent;
 import monstertrainergame.model.events.EventDispatcher;
 import static monstertrainergame.controller.BattleController.Interaction.*;
 import monstertrainergame.model.events.MoveEvent;
+import monstertrainergame.model.events.StartTurnEvent;
 
 public class BattleController {
     // Not owned
@@ -55,6 +57,22 @@ public class BattleController {
 
     public void cancel() {
         selected = null;
+    }
+
+    public void endTurn() {
+        // Clear any relevant state in this controller
+        selected = null;
+
+        // Fire end turn event
+        EventDispatcher.instance.dispatch(new EndTurnEvent());
+
+        //TODO execute AI turn
+        for (FieldedMonster monster : battle.getOpponents()) {
+            EventDispatcher.instance.dispatch(new MoveEvent(monster, new Vector2(1300, 900)));
+        }
+
+        // Fire event for new player turn
+        EventDispatcher.instance.dispatch(new StartTurnEvent());
     }
 
     public enum Interaction {
