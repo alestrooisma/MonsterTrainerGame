@@ -59,18 +59,19 @@ public class BattleLayer extends AbstractLayer {
     @Override
     public void update(float dt) {
         // Handle camera controls
-        final float v = 150;
+        final float vx = 6;
+        final float vy = vx*1.3f;
         if (Gdx.input.isKeyPressed(Keys.LEFT)) {
-            cameraController.move(-v*dt, 0);
+            cameraController.move(-vx*dt, 0);
         }
         if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
-            cameraController.move(v*dt, 0);
+            cameraController.move(vx*dt, 0);
         }
         if (Gdx.input.isKeyPressed(Keys.DOWN)) {
-            cameraController.move(0, -v*dt);
+            cameraController.move(0, -vy*dt);
         }
         if (Gdx.input.isKeyPressed(Keys.UP)) {
-            cameraController.move(0, v*dt);
+            cameraController.move(0, vy*dt);
         }
         projection.getCamera().update();
 

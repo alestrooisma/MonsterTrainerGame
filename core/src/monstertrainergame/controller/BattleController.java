@@ -68,7 +68,7 @@ public class BattleController {
 
         //TODO execute AI turn
         for (FieldedMonster monster : battle.getOpponents()) {
-            EventDispatcher.instance.dispatch(new MoveEvent(monster, new Vector2(1300, 900)));
+            EventDispatcher.instance.dispatch(new MoveEvent(monster, new Vector2(52, 36)));
         }
 
         // Fire event for new player turn

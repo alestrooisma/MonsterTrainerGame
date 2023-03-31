@@ -15,8 +15,8 @@ public class BattleProjection extends Projection {
     }
 
     public void worldToPixelCoordinates(float x, float y, Vector3 pixel) {
-        pixel.x = x;
-        pixel.y = y;
+        pixel.x = x * 25;
+        pixel.y = y / 2 * 25;
         pixel.z = 0;
     }
 
@@ -25,7 +25,7 @@ public class BattleProjection extends Projection {
     }
 
     public void pixelToWorldCoordinates(float x, float y, Vector2 world) {
-        world.x = x;
-        world.y = y;
+        world.x = x / 25f;
+        world.y = y * 2 / 25f;
     }
 }

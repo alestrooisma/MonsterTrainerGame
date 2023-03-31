@@ -47,25 +47,25 @@ public class MonsterTrainerGame extends ApplicationAdapter {
 
     private static Battle createBattle() {
         // Battlefield size
-        Rectangle bounds = new Rectangle(18, 36, 48 * 54 - 18, 24 * 72 - 36);
-        float cx = (48 * 54 + 18) / 2f;
-        float cy = (24 * 72 + 36) / 2f;
+        Rectangle bounds = new Rectangle(18 / 25f, 36 / 25f, (48 * 54 - 18) / 25f, (24 * 72 - 36) / 25f);
+        float cx = (48 * 54 + 18) / 50f;
+        float cy = (24 * 72 + 36) / 50f;
 
-        MonsterType firedragon = new MonsterType("Fire Dragon", 48);
-        MonsterType seawyrm = new MonsterType("Sea Wyrm", 30);
-        MonsterType serpent = new MonsterType("Serpent", 28);
-        MonsterType mudwalker = new MonsterType("Mudwalker", 24);
-        MonsterType mudcrawler = new MonsterType("Mudcrawler", 19);
+        MonsterType firedragon = new MonsterType("Fire Dragon", 48/25f);
+        MonsterType seawyrm = new MonsterType("Sea Wyrm", 30/25f);
+        MonsterType serpent = new MonsterType("Serpent", 28/25f);
+        MonsterType mudwalker = new MonsterType("Mudwalker", 24/25f);
+        MonsterType mudcrawler = new MonsterType("Mudcrawler", 19/25f);
 
         Array<FieldedMonster> player = new Array<>(3);
-        player.add(new FieldedMonster(new Monster(firedragon), cx - 100, cy - 100));
-        player.add(new FieldedMonster(new Monster(seawyrm), cx - 220, cy - 50));
-        player.add(new FieldedMonster(new Monster(serpent), cx - 100, cy - 150));
+        player.add(new FieldedMonster(new Monster(firedragon), cx - 4, cy - 4));
+        player.add(new FieldedMonster(new Monster(seawyrm), cx - 9, cy - 2));
+        player.add(new FieldedMonster(new Monster(serpent), cx - 2, cy - 8));
 
         Array<FieldedMonster> opponent = new Array<>(3);
-        opponent.add(new FieldedMonster(new Monster(mudwalker), cx + 100, cy + 25));
-        opponent.add(new FieldedMonster(new Monster(mudcrawler), cx + 80, cy + 75));
-        opponent.add(new FieldedMonster(new Monster(mudcrawler), cx + 155, cy + 5));
+        opponent.add(new FieldedMonster(new Monster(mudwalker), cx + 4, cy + 1));
+        opponent.add(new FieldedMonster(new Monster(mudcrawler), cx + 3, cy + 3));
+        opponent.add(new FieldedMonster(new Monster(mudcrawler), cx + 6, cy + 0.2f));
         return new Battle(bounds, player, opponent);
     }
 
