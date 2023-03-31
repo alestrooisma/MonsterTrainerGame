@@ -29,7 +29,7 @@ public class Skin implements Disposable {
     }
 
     public void draw(SpriteBatch batch, float x, float y, float rotation) {
-        batch.draw(texture, x - origin.x, y - origin.y,
+        batch.draw(texture, Math.round(x - origin.x), Math.round(y - origin.y),
                 origin.x, origin.y,
                 texture.getWidth(), texture.getHeight(),
                 1, 1,

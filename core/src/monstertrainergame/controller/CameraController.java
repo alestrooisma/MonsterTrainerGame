@@ -51,7 +51,7 @@ public class CameraController {
 
         // Actually set the camera position
         projection.worldToPixelCoordinates(x, y, pixel);
-        projection.getCamera().position.set(pixel.x, pixel.y, pixel.z);
+        projection.getCamera().position.set(Math.round(pixel.x), Math.round(pixel.y), Math.round(pixel.z));
     }
 
     public void move(float dx, float dy) {
