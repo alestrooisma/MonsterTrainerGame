@@ -20,6 +20,10 @@ public class FieldedMonster {
         return monster.getType();
     }
 
+    public boolean isOwnedByPlayer() {
+        return monster.isOwnedByPlayer();
+    }
+
     public Vector2 getPosition() {
         return position;
     }

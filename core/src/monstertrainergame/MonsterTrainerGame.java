@@ -7,7 +7,6 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.Array;
 import monstertrainergame.controller.BattleController;
 import monstertrainergame.controller.ModelUpdater;
 import monstertrainergame.events.EventDispatcher;
@@ -51,22 +50,27 @@ public class MonsterTrainerGame extends ApplicationAdapter {
         float cx = (48 * 54 + 18) / 50f;
         float cy = (24 * 72 + 36) / 50f;
 
+        // Create battle object
+        Battle battle = new Battle(bounds);
+
+        // Create monster types
         MonsterType firedragon = new MonsterType("Fire Dragon", 48/25f, 5);
         MonsterType seawyrm = new MonsterType("Sea Wyrm", 30/25f, 6);
         MonsterType serpent = new MonsterType("Serpent", 28/25f, 7);
         MonsterType mudwalker = new MonsterType("Mudwalker", 24/25f, 4);
         MonsterType mudcrawler = new MonsterType("Mudcrawler", 19/25f, 3);
 
-        Array<FieldedMonster> player = new Array<>(3);
-        player.add(new FieldedMonster(new Monster(firedragon), cx - 4, cy - 4));
-        player.add(new FieldedMonster(new Monster(seawyrm), cx - 9, cy - 2));
-        player.add(new FieldedMonster(new Monster(serpent), cx - 2, cy - 8));
+        // Add player monsters
+        battle.add(new FieldedMonster(new Monster(firedragon, true), cx - 4, cy - 4));
+        battle.add(new FieldedMonster(new Monster(seawyrm, true), cx - 9, cy - 2));
+        battle.add(new FieldedMonster(new Monster(serpent, true), cx - 2, cy - 8));
 
-        Array<FieldedMonster> opponent = new Array<>(3);
-        opponent.add(new FieldedMonster(new Monster(mudwalker), cx + 4, cy + 1));
-        opponent.add(new FieldedMonster(new Monster(mudcrawler), cx + 3, cy + 3));
-        opponent.add(new FieldedMonster(new Monster(mudcrawler), cx + 6, cy + 0.2f));
-        return new Battle(bounds, player, opponent);
+        // Add opponent monsters
+        battle.add(new FieldedMonster(new Monster(mudwalker, false), cx + 4, cy + 1));
+        battle.add(new FieldedMonster(new Monster(mudcrawler, false), cx + 3, cy + 3));
+        battle.add(new FieldedMonster(new Monster(mudcrawler, false), cx + 6, cy + 0.2f));
+
+        return battle;
     }
 
     private static ResourceManager loadResources() {

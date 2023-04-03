@@ -8,10 +8,26 @@ public class Battle {
     private final Array<FieldedMonster> fieldedMonsters;
     private final Array<FieldedMonster> opponents;
 
+    public Battle(Rectangle bounds) {
+        this(bounds, 3, 3);
+    }
+
+    public Battle(Rectangle bounds, int playerPartySize, int opponentPartySize) {
+        this(bounds, new Array<FieldedMonster>(playerPartySize), new Array<FieldedMonster>(opponentPartySize));
+    }
+
     public Battle(Rectangle bounds, Array<FieldedMonster> fieldedMonsters, Array<FieldedMonster> opponents) {
         this.bounds = bounds;
         this.fieldedMonsters = fieldedMonsters;
         this.opponents = opponents;
+    }
+
+    public void add(FieldedMonster monster) {
+        if (monster.isOwnedByPlayer()) {
+            fieldedMonsters.add(monster);
+        } else {
+            opponents.add(monster);
+        }
     }
 
     public Rectangle getBounds() {
