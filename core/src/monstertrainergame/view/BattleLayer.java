@@ -236,15 +236,15 @@ public class BattleLayer extends AbstractLayer {
         public void handleAbilityEvent(AbilityEvent event) {
             projection.worldToPixelCoordinates(event.getMonster().getPosition(), origin);
             projection.worldToPixelCoordinates(event.getTarget().getPosition(), target);
-            origin.z = 20; // TODO determine properly
-            target.z = origin.z;
+            origin.z = determineProjectileHeight(event.getMonster());
+            target.z = determineProjectileHeight(event.getTarget());
 
             // Create the projectile element
             Element projectile = new Element(event.getAbility().getName());
             projectile.setPosition(origin);
 
             // Set the rotation of the projectile
-            pixel.set(target).sub(origin);
+            pixel.set(target.x, target.y + target.z, 0).sub(origin.x, origin.y + origin.z, 0);
             float angle = MathUtils.acos(pixel.dot(0, 1, 0) / pixel.len());
             projectile.setRotation(Math.signum(pixel.x) * angle);
             // Note: angle is the absolute angle between vectors, so it needs to be multiplied by
@@ -256,6 +256,12 @@ public class BattleLayer extends AbstractLayer {
 
             // Add callback to remove projectile from render list once animation is done
             engine.add(this, projectile);
+        }
+
+        private float determineProjectileHeight(FieldedMonster monster) {
+            Element e = findElement(monster);
+            Rectangle bounds = e.getSkin().getBounds();
+            return bounds.y + bounds.height / 2;
         }
 
         @Override

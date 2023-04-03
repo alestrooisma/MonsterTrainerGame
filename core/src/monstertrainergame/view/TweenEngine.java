@@ -6,12 +6,12 @@ import com.badlogic.gdx.utils.Array;
 public class TweenEngine {
     private final Array<Action> actions = new Array<>();
 
-    public void add(Vector3 target, float x, float y, float speed) {
-        actions.add(new Vector3TweenAction(target, x, y, speed));
+    public void add(Vector3 target, float x, float y, float z, float speed) {
+        actions.add(new Vector3TweenAction(target, x, y, z, speed));
     }
 
     public void add(Vector3 target, Vector3 destination, float speed) {
-        add(target, destination.x, destination.y, speed);
+        add(target, destination.x, destination.y, destination.z, speed);
     }
 
     public void add(Callback callback, Object payload) {
@@ -41,9 +41,9 @@ public class TweenEngine {
         // Not owned
         private final Vector3 target;
 
-        public Vector3TweenAction(Vector3 target, float x, float y, float speed) {
+        public Vector3TweenAction(Vector3 target, float x, float y, float z, float speed) {
             this.target = target;
-            this.destination.set(x, y, target.z);
+            this.destination.set(x, y, z);
             this.speed = speed;
         }
 
@@ -54,7 +54,7 @@ public class TweenEngine {
             }
 
             if (Math.abs(velocity.x * dt) < Math.abs(destination.x - target.x)) {
-                target.add(velocity.x * dt, velocity.y * dt, 0);
+                target.add(velocity.x * dt, velocity.y * dt, velocity.z * dt);
                 return false;
             } else {
                 target.set(destination);

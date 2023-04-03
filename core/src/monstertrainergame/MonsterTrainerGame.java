@@ -65,7 +65,9 @@ public class MonsterTrainerGame extends ApplicationAdapter {
         Monster monster = new Monster(firedragon, true);
         monster.getAbilities().add(new Ability("Fireball"));
         battle.add(new FieldedMonster(monster, cx - 4, cy - 4));
-        battle.add(new FieldedMonster(new Monster(seawyrm, true), cx - 9, cy - 2));
+        Monster monster2 = new Monster(seawyrm, true);
+        monster2.getAbilities().add(new Ability("Arcane Missile"));
+        battle.add(new FieldedMonster(monster2, cx - 9, cy - 2));
         battle.add(new FieldedMonster(new Monster(serpent, true), cx - 2, cy - 8));
 
         // Add opponent monsters
@@ -84,6 +86,7 @@ public class MonsterTrainerGame extends ApplicationAdapter {
         resources.add("Mudwalker", createMonsterSkin("giant-mudcrawler.png", 37, 21, 8, 7, 52, 48));
         resources.add("Mudcrawler", createMonsterSkin("mudcrawler.png", 35, 18, 16, 11, 38, 23));
         resources.add("Fireball", createProjectileSkin("fireball-n.png", 49, 63));
+        resources.add("Arcane Missile", createProjectileSkin("whitemissile-n.png", 50, 50));
         return  resources;
     }
 
