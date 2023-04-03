@@ -7,6 +7,7 @@ public class FieldedMonster {
     private final Monster monster;
     private final Vector2 position;
     private float distanceMovedThisTurn = 0;
+    private boolean performedAbility = false;
 
     public FieldedMonster(Monster monster, float x, float y) {
         this(monster, new Vector2(x, y));
@@ -34,7 +35,11 @@ public class FieldedMonster {
     }
 
     public float getRemainingMovementRange() {
-        return Math.max(0, monster.getMaxMovementRange() - distanceMovedThisTurn);
+        if (hasPerformedAbility()) {
+            return 0;
+        } else {
+            return Math.max(0, monster.getMaxMovementRange() - distanceMovedThisTurn);
+        }
     }
 
     public void moveTo(Vector2 destination) {
@@ -42,8 +47,17 @@ public class FieldedMonster {
         this.position.set(destination);
     }
 
+    public boolean hasPerformedAbility() {
+        return performedAbility;
+    }
+
+    public void setPerformedAbility(boolean performedAbility) {
+        this.performedAbility = performedAbility;
+    }
+
     public void endTurn() {
         distanceMovedThisTurn = 0;
+        performedAbility = false;
     }
 
     public boolean occupies(float x, float y) {

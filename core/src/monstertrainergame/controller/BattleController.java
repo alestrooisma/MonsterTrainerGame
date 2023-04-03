@@ -55,7 +55,7 @@ public class BattleController {
         } else if (target != null) {
             if (target.isOwnedByPlayer()) {
                 return SELECT;
-            } else if (ability != null){
+            } else if (ability != null && !selected.hasPerformedAbility()) {
                 return ABILITY;
             } else {
                 return NONE;

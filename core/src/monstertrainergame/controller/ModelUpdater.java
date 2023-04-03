@@ -33,6 +33,7 @@ public class ModelUpdater implements EventListener {
 
     @Override
     public void handleAbilityEvent(AbilityEvent event) {
+        event.getMonster().setPerformedAbility(true);
         // TODO actually apply damage etc
     }
 }
