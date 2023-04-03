@@ -9,6 +9,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -16,6 +17,7 @@ import com.badlogic.gdx.utils.Array;
 import java.util.Comparator;
 import monstertrainergame.controller.BattleController;
 import monstertrainergame.controller.CameraController;
+import monstertrainergame.events.AbilityEvent;
 import monstertrainergame.events.EndTurnEvent;
 import monstertrainergame.events.EventDispatcher;
 import monstertrainergame.events.EventListener;
@@ -208,6 +210,8 @@ public class BattleLayer extends AbstractLayer {
     }
 
     private class BattleLayerEventListener implements EventListener, TweenEngine.Callback {
+        private final Vector3 origin = new Vector3();
+        private final Vector3 target = new Vector3();
 
         @Override
         public void handleStartTurnEvent(StartTurnEvent event) {
@@ -229,8 +233,38 @@ public class BattleLayer extends AbstractLayer {
         }
 
         @Override
+        public void handleAbilityEvent(AbilityEvent event) {
+            projection.worldToPixelCoordinates(event.getMonster().getPosition(), origin);
+            projection.worldToPixelCoordinates(event.getTarget().getPosition(), target);
+            origin.z = 20; // TODO determine properly
+            target.z = origin.z;
+
+            // Create the projectile element
+            Element projectile = new Element(event.getAbility().getName());
+            projectile.setPosition(origin);
+
+            // Set the rotation of the projectile
+            pixel.set(target).sub(origin);
+            float angle = MathUtils.acos(pixel.dot(0, 1, 0) / pixel.len());
+            projectile.setRotation(Math.signum(pixel.x) * angle);
+            // Note: angle is the absolute angle between vectors, so it needs to be multiplied by
+            // the sign of the x component to get the rotation in the correct direction
+
+            // Add to render list and animation engine
+            elements.add(projectile);
+            engine.add(projectile.getPosition(), target, 600);
+
+            // Add callback to remove projectile from render list once animation is done
+            engine.add(this, projectile);
+        }
+
+        @Override
         public void callback(Object payload) {
-            playerTurn = true;
+            if (payload != null) { // Remove projectile
+                elements.removeValue((Element) payload, true);
+            } else { // Start player turn
+                playerTurn = true;
+            }
         }
     }
 

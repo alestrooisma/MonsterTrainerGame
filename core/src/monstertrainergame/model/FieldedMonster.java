@@ -1,6 +1,7 @@
 package monstertrainergame.model;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
 public class FieldedMonster {
     private final Monster monster;
@@ -22,6 +23,10 @@ public class FieldedMonster {
 
     public boolean isOwnedByPlayer() {
         return monster.isOwnedByPlayer();
+    }
+
+    public Array<Ability> getAbilities() {
+        return monster.getAbilities();
     }
 
     public Vector2 getPosition() {

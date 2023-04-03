@@ -11,6 +11,7 @@ import monstertrainergame.controller.BattleController;
 import monstertrainergame.controller.ModelUpdater;
 import monstertrainergame.events.EventDispatcher;
 import monstertrainergame.events.StartTurnEvent;
+import monstertrainergame.model.Ability;
 import monstertrainergame.model.Battle;
 import monstertrainergame.model.FieldedMonster;
 import monstertrainergame.model.Monster;
@@ -61,7 +62,9 @@ public class MonsterTrainerGame extends ApplicationAdapter {
         MonsterType mudcrawler = new MonsterType("Mudcrawler", 19/25f, 3);
 
         // Add player monsters
-        battle.add(new FieldedMonster(new Monster(firedragon, true), cx - 4, cy - 4));
+        Monster monster = new Monster(firedragon, true);
+        monster.getAbilities().add(new Ability("Fireball"));
+        battle.add(new FieldedMonster(monster, cx - 4, cy - 4));
         battle.add(new FieldedMonster(new Monster(seawyrm, true), cx - 9, cy - 2));
         battle.add(new FieldedMonster(new Monster(serpent, true), cx - 2, cy - 8));
 
@@ -75,11 +78,12 @@ public class MonsterTrainerGame extends ApplicationAdapter {
 
     private static ResourceManager loadResources() {
         ResourceManager resources = ResourceManager.create();
-        resources.add("Fire Dragon", createSkin("fire-dragon.png", 94, 72, 8, 46, 140, 154));
-        resources.add("Sea Wyrm", createSkin("seaserpent.png", 34, 26, 4, 2, 66, 70));
-        resources.add("Serpent", createSkin("water-serpent.png", 36, 20, 6, 7, 60, 53));
-        resources.add("Mudwalker", createSkin("giant-mudcrawler.png", 37, 21, 8, 7, 52, 48));
-        resources.add("Mudcrawler", createSkin("mudcrawler.png", 35, 18, 16, 11, 38, 23));
+        resources.add("Fire Dragon", createMonsterSkin("fire-dragon.png", 94, 72, 8, 46, 140, 154));
+        resources.add("Sea Wyrm", createMonsterSkin("seaserpent.png", 34, 26, 4, 2, 66, 70));
+        resources.add("Serpent", createMonsterSkin("water-serpent.png", 36, 20, 6, 7, 60, 53));
+        resources.add("Mudwalker", createMonsterSkin("giant-mudcrawler.png", 37, 21, 8, 7, 52, 48));
+        resources.add("Mudcrawler", createMonsterSkin("mudcrawler.png", 35, 18, 16, 11, 38, 23));
+        resources.add("Fireball", createProjectileSkin("fireball-n.png", 49, 63));
         return  resources;
     }
 
@@ -92,9 +96,14 @@ public class MonsterTrainerGame extends ApplicationAdapter {
         }
     }
 
-    private static Skin createSkin(String filename, float offsetX, float offsetY, float boxX, float boxY, float boxWidth, float boxHeight) {
+    private static Skin createMonsterSkin(String filename, float offsetX, float offsetY, float boxX, float boxY, float boxWidth, float boxHeight) {
         Texture texture = new Texture(Gdx.files.internal("images/monsters/" + filename));
         return new Skin(texture, offsetX, offsetY, new Rectangle(boxX - offsetX, boxY - offsetY, boxWidth, boxHeight));
+    }
+
+    private static Skin createProjectileSkin(String filename, float offsetX, float offsetY) {
+        Texture texture = new Texture(Gdx.files.internal("images/projectiles/" + filename));
+        return new Skin(texture, offsetX, offsetY);
     }
 
     @Override

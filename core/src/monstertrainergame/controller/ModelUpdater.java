@@ -1,5 +1,6 @@
 package monstertrainergame.controller;
 
+import monstertrainergame.events.AbilityEvent;
 import monstertrainergame.events.EndTurnEvent;
 import monstertrainergame.events.EventListener;
 import monstertrainergame.events.MoveEvent;
@@ -28,5 +29,10 @@ public class ModelUpdater implements EventListener {
     @Override
     public void handleMoveEvent(MoveEvent event) {
         event.getMonster().moveTo(event.getDestination());
+    }
+
+    @Override
+    public void handleAbilityEvent(AbilityEvent event) {
+        // TODO actually apply damage etc
     }
 }
