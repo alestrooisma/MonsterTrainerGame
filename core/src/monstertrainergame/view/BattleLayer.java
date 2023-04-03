@@ -16,12 +16,12 @@ import com.badlogic.gdx.utils.Array;
 import java.util.Comparator;
 import monstertrainergame.controller.BattleController;
 import monstertrainergame.controller.CameraController;
+import monstertrainergame.events.EndTurnEvent;
+import monstertrainergame.events.EventDispatcher;
+import monstertrainergame.events.EventListener;
+import monstertrainergame.events.MoveEvent;
+import monstertrainergame.events.StartTurnEvent;
 import monstertrainergame.model.FieldedMonster;
-import monstertrainergame.model.events.EndTurnEvent;
-import monstertrainergame.model.events.EventDispatcher;
-import monstertrainergame.model.events.EventListener;
-import monstertrainergame.model.events.MoveEvent;
-import monstertrainergame.model.events.StartTurnEvent;
 
 public class BattleLayer extends AbstractLayer {
     // Owned

@@ -1,4 +1,4 @@
-package monstertrainergame.model.events;
+package monstertrainergame.events;
 
 public interface EventListener {
     void handleStartTurnEvent(StartTurnEvent event);

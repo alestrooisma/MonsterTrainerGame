@@ -1,4 +1,4 @@
-package monstertrainergame.model.events;
+package monstertrainergame.events;
 
 public class StartTurnEvent implements Event {
 

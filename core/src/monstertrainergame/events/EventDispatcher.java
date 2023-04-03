@@ -1,4 +1,4 @@
-package monstertrainergame.model.events;
+package monstertrainergame.events;
 
 import com.badlogic.gdx.utils.Array;
 

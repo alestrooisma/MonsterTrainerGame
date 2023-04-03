@@ -1,5 +1,9 @@
-package monstertrainergame.model.events;
+package monstertrainergame.controller;
 
+import monstertrainergame.events.EndTurnEvent;
+import monstertrainergame.events.EventListener;
+import monstertrainergame.events.MoveEvent;
+import monstertrainergame.events.StartTurnEvent;
 import monstertrainergame.model.Battle;
 import monstertrainergame.model.FieldedMonster;
 

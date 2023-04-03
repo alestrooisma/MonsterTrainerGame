@@ -1,13 +1,13 @@
 package monstertrainergame.controller;
 
 import com.badlogic.gdx.math.Vector2;
+import monstertrainergame.events.EndTurnEvent;
+import monstertrainergame.events.EventDispatcher;
+import monstertrainergame.events.MoveEvent;
+import monstertrainergame.events.StartTurnEvent;
 import monstertrainergame.model.Battle;
 import monstertrainergame.model.FieldedMonster;
-import monstertrainergame.model.events.EndTurnEvent;
-import monstertrainergame.model.events.EventDispatcher;
 import static monstertrainergame.controller.BattleController.Interaction.*;
-import monstertrainergame.model.events.MoveEvent;
-import monstertrainergame.model.events.StartTurnEvent;
 
 public class BattleController {
     // Not owned

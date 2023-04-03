@@ -1,4 +1,4 @@
-package monstertrainergame.model.events;
+package monstertrainergame.events;
 
 import com.badlogic.gdx.math.Vector2;
 import monstertrainergame.model.FieldedMonster;
