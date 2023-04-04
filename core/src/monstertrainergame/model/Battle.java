@@ -2,8 +2,10 @@ package monstertrainergame.model;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
+import java.util.Iterator;
 
-public class Battle {
+public class Battle implements Iterable<FieldedMonster> {
+    private final BattleIterator iterator;
     private final Rectangle bounds;
     private final Array<FieldedMonster> fieldedMonsters;
     private final Array<FieldedMonster> opponents;
@@ -20,6 +22,7 @@ public class Battle {
         this.bounds = bounds;
         this.fieldedMonsters = fieldedMonsters;
         this.opponents = opponents;
+        this.iterator = new BattleIterator();
     }
 
     public void add(FieldedMonster monster) {
@@ -66,5 +69,45 @@ public class Battle {
             }
         }
         return null;
+    }
+
+    @Override
+    public Iterator<FieldedMonster> iterator() {
+        iterator.reset();
+        return iterator;
+    }
+
+    private class BattleIterator implements Iterator<FieldedMonster> {
+        private int nextIndex = 0;
+
+        @Override
+        public boolean hasNext() {
+            return nextIndex < fieldedMonsters.size + opponents.size;
+        }
+
+        @Override
+        public FieldedMonster next() {
+            FieldedMonster monster;
+            if (nextIndex < fieldedMonsters.size) {
+                monster = fieldedMonsters.get(nextIndex);
+            } else {
+                monster = opponents.get(nextIndex - fieldedMonsters.size);
+            }
+            nextIndex++;
+            return monster;
+        }
+
+        @Override
+        public void remove() {
+            if (nextIndex < fieldedMonsters.size) {
+                fieldedMonsters.removeIndex(nextIndex);
+            } else {
+                opponents.removeIndex(nextIndex - fieldedMonsters.size);
+            }
+        }
+
+        public void reset() {
+            nextIndex = 0;
+        }
     }
 }

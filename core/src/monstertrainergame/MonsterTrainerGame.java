@@ -91,10 +91,7 @@ public class MonsterTrainerGame extends ApplicationAdapter {
     }
 
     private void populateView(Battle battle) {
-        for (FieldedMonster monster : battle.getFieldedMonsters()) {
-            view.add(monster);
-        }
-        for (FieldedMonster monster : battle.getOpponents()) {
+        for (FieldedMonster monster : battle) {
             view.add(monster);
         }
     }
