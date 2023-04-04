@@ -13,7 +13,7 @@ public class Element {
     private final Skin skin;
 
     public Element(FieldedMonster monster) {
-        this(monster, ResourceManager.instance.get(monster.getType().getName()));
+        this(monster, ResourceManager.instance.get(monster.getTypeName()));
     }
 
     public Element(String skinId) {

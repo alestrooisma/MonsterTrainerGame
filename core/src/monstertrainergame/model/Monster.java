@@ -17,8 +17,12 @@ public class Monster {
         this.abilities = abilities;
     }
 
-    public MonsterType getType() {
-        return type;
+    public String getTypeName() {
+        return type.getName();
+    }
+
+    public float getRadius() {
+        return type.getRadius();
     }
 
     public boolean isOwnedByPlayer() {

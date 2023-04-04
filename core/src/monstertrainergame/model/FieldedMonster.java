@@ -18,8 +18,12 @@ public class FieldedMonster {
         this.position = position;
     }
 
-    public MonsterType getType() {
-        return monster.getType();
+    public String getTypeName() {
+        return monster.getTypeName();
+    }
+
+    public float getRadius() {
+        return monster.getRadius();
     }
 
     public boolean isOwnedByPlayer() {
@@ -61,7 +65,7 @@ public class FieldedMonster {
     }
 
     public boolean occupies(float x, float y) {
-        float radius = monster.getType().getRadius();
+        float radius = monster.getRadius();
         float dx = x - position.x;
         float dy = y - position.y;
         return dx * dx + dy * dy <= radius * radius;

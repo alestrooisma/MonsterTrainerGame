@@ -126,7 +126,7 @@ public class BattleLayer extends AbstractLayer {
     }
 
     private void renderFootprint(Element e) {
-        renderEllipse(e.getPosition(), e.getMonster().getType().getRadius());
+        renderEllipse(e.getPosition(), e.getMonster().getRadius());
     }
 
     private void renderMovementRange(Element e) {
