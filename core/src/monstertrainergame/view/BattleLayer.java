@@ -259,7 +259,7 @@ public class BattleLayer extends AbstractLayer {
             projection.worldToPixelCoordinates(event.getTarget().getPosition(), target);
 
             Vector3 pos = findElement(event.getMonster()).getPosition();
-            engine.add(pos, target, 300);
+            engine.add(pos, target, 400);
             engine.add(pos, origin, 200);
         }
 

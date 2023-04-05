@@ -16,12 +16,12 @@ public class Pathfinder {
         this.battle = battle;
     }
 
-    public void determineMovementDestinationTowards(FieldedMonster movingMonster, FieldedMonster targetMonster, Vector2 result) {
-        determineMovementDestinationTowards(movingMonster, targetMonster.getPosition(), result);
+    public FieldedMonster determineMovementDestinationTowards(FieldedMonster movingMonster, FieldedMonster targetMonster, Vector2 result) {
+        return determineMovementDestinationTowards(movingMonster, targetMonster.getPosition(), result);
     }
 
-    public void determineMovementDestinationTowards(FieldedMonster movingMonster, Vector2 position, Vector2 result) {
-        determineMovementDestinationTowards(movingMonster, position.x, position.y, result);
+    public FieldedMonster determineMovementDestinationTowards(FieldedMonster movingMonster, Vector2 position, Vector2 result) {
+        return determineMovementDestinationTowards(movingMonster, position.x, position.y, result);
     }
 
     public FieldedMonster determineMovementDestinationTowards(FieldedMonster movingMonster, float x, float y, Vector2 result) {

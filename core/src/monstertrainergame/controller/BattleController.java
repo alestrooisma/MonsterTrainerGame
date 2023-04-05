@@ -37,6 +37,26 @@ public class BattleController {
 
     public void interact(float x, float y) {
         Interaction interaction = determineInteraction(x, y);
+        performInteraction(interaction);
+    }
+
+    public Interaction determineInteraction(float x, float y) {
+        target = battle.getMonsterAt(x, y);
+        if (target != null && target.isOwnedByPlayer()) {
+            return SELECT;
+        } else if (canPerformSelectedAbility()) {
+            return ABILITY;
+        } else if (canMoveToPerformSelectedAbility()) {
+            return MOVE_AND_ABILITY;
+        } else if (selected != null) {
+            pathfinder.determineMovementDestinationTowards(selected, x, y, destination);
+            return MOVE;
+        } else {
+            return NONE;
+        }
+    }
+
+    private void performInteraction(Interaction interaction) {
         switch (interaction) {
             case SELECT:
                 selected = target;
@@ -48,20 +68,10 @@ public class BattleController {
             case ABILITY:
                 EventDispatcher.instance.dispatch(new AbilityEvent(selected, ability, target));
                 break;
-        }
-    }
-
-    public Interaction determineInteraction(float x, float y) {
-        target = battle.getMonsterAt(x, y);
-        if (target != null && target.isOwnedByPlayer()) {
-            return SELECT;
-        } else if (canPerformSelectedAbility()) {
-            return ABILITY;
-        } else if (selected != null) {
-            pathfinder.determineMovementDestinationTowards(selected, x, y, destination);
-            return MOVE;
-        } else {
-            return NONE;
+            case MOVE_AND_ABILITY:
+                performInteraction(MOVE);
+                performInteraction(ABILITY);
+                break;
         }
     }
 
@@ -70,10 +80,23 @@ public class BattleController {
                 && !(ability.getType() == MELEE && !withinMeleeRange());
     }
 
+    private boolean canMoveToPerformSelectedAbility() {
+        return target != null && ability != null && !selected.hasPerformedAbility()
+                && ability.getType() == MELEE && canMoveWithinMeleeRange();
+    }
+
     private boolean withinMeleeRange() {
-        float minimum = selected.getRadius() + target.getRadius();
+        return withinRange(selected.getRadius() + target.getRadius());
+    }
+
+    private boolean canMoveWithinMeleeRange() {
+        FieldedMonster moveEnder = pathfinder.determineMovementDestinationTowards(selected, target, destination);
+        return moveEnder == target;
+    }
+
+    private boolean withinRange(float range) {
         float distance2 = selected.getPosition().dst2(target.getPosition());
-        return distance2 < minimum * minimum * (1 + 1e-5f); // Accommodate for floating point errors;
+        return distance2 < range * range * (1 + 1e-5f); // Accommodate for floating point errors;
     }
 
     public void cancel() {
@@ -96,6 +119,6 @@ public class BattleController {
     }
 
     public enum Interaction {
-        NONE, SELECT, MOVE, ABILITY
+        NONE, SELECT, MOVE, ABILITY, MOVE_AND_ABILITY
     }
 }
