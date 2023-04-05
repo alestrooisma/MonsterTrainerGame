@@ -12,6 +12,8 @@ import monstertrainergame.model.FieldedMonster;
 import static monstertrainergame.controller.BattleController.Interaction.*;
 
 public class BattleController {
+    // Owned
+    private final Pathfinder pathfinder;
     // Not owned
     private final Battle battle;
     private FieldedMonster selected = null;
@@ -21,6 +23,7 @@ public class BattleController {
 
     public BattleController(Battle battle) {
         this.battle = battle;
+        this.pathfinder = new Pathfinder(battle);
     }
 
     public Battle getBattle() {
@@ -49,31 +52,16 @@ public class BattleController {
 
     public Interaction determineInteraction(float x, float y) {
         target = battle.getMonsterAt(x, y);
-        if (canMoveTo(selected, x, y, target)) {
-            destination.set(x, y);
+        if (target != null && target.isOwnedByPlayer()) {
+            return SELECT;
+        } else if (target != null && ability != null && !selected.hasPerformedAbility()) {
+            return ABILITY;
+        } else if (selected != null) {
+            pathfinder.determineMovementDestinationTowards(selected, x, y, destination);
             return MOVE;
-        } else if (target != null) {
-            if (target.isOwnedByPlayer()) {
-                return SELECT;
-            } else if (ability != null && !selected.hasPerformedAbility()) {
-                return ABILITY;
-            } else {
-                return NONE;
-            }
         } else {
             return NONE;
         }
-    }
-
-    private static boolean canMoveTo(FieldedMonster movingMonster, float x, float y, FieldedMonster monsterAtXY) {
-        return movingMonster != null && (monsterAtXY == null || monsterAtXY == movingMonster)
-                && isWithinMovementRange(movingMonster, x, y);
-    }
-
-    private static boolean isWithinMovementRange(FieldedMonster movingMonster, float x, float y) {
-        float distance2 = movingMonster.getPosition().dst2(x, y);
-        float remaining = movingMonster.getRemainingMovementRange();
-        return distance2 < remaining * remaining;
     }
 
     public void cancel() {

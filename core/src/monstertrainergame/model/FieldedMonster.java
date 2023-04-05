@@ -47,7 +47,7 @@ public class FieldedMonster {
     }
 
     public void moveTo(Vector2 destination) {
-        distanceMovedThisTurn += this.position.sub(destination).len();
+        distanceMovedThisTurn += position.dst(destination);
         this.position.set(destination);
     }
 
