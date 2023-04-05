@@ -29,6 +29,7 @@ public class BattleLayer extends AbstractLayer {
     // Owned
     private final InputProcessor inputProcessor = new BattleLayerInputProcessor();
     private final TweenEngine engine = new TweenEngine();
+    private final AbilityAnimator animator = new AbilityAnimator();
     private final ReverseYComparator reverseYComparator = new ReverseYComparator();
     private final ShapeRenderer renderer = new ShapeRenderer();
     private final SpriteBatch batch = new SpriteBatch();
@@ -210,8 +211,6 @@ public class BattleLayer extends AbstractLayer {
     }
 
     private class BattleLayerEventListener implements EventListener, TweenEngine.Callback {
-        private final Vector3 origin = new Vector3();
-        private final Vector3 target = new Vector3();
 
         @Override
         public void handleStartTurnEvent(StartTurnEvent event) {
@@ -234,6 +233,37 @@ public class BattleLayer extends AbstractLayer {
 
         @Override
         public void handleAbilityEvent(AbilityEvent event) {
+            switch (event.getAbility().getType()) {
+                case MELEE:
+                    animator.animateMeleeAbility(event);
+                    break;
+                case PROJECTILE:
+                    animator.animateProjectileAbility(event);
+                    break;
+            }
+        }
+
+        @Override
+        public void callback(Object payload) {
+            // Start player turn after all enemy animations have finished
+            playerTurn = true;
+        }
+    }
+
+    private class AbilityAnimator implements TweenEngine.Callback {
+        private final Vector3 origin = new Vector3();
+        private final Vector3 target = new Vector3();
+
+        public void animateMeleeAbility(AbilityEvent event) {
+            projection.worldToPixelCoordinates(event.getMonster().getPosition(), origin);
+            projection.worldToPixelCoordinates(event.getTarget().getPosition(), target);
+
+            Vector3 pos = findElement(event.getMonster()).getPosition();
+            engine.add(pos, target, 300);
+            engine.add(pos, origin, 200);
+        }
+
+        public void animateProjectileAbility(AbilityEvent event) {
             projection.worldToPixelCoordinates(event.getMonster().getPosition(), origin);
             projection.worldToPixelCoordinates(event.getTarget().getPosition(), target);
             origin.z = determineProjectileHeight(event.getMonster());
@@ -266,11 +296,7 @@ public class BattleLayer extends AbstractLayer {
 
         @Override
         public void callback(Object payload) {
-            if (payload != null) { // Remove projectile
-                elements.removeValue((Element) payload, true);
-            } else { // Start player turn
-                playerTurn = true;
-            }
+            elements.removeValue((Element) payload, true);
         }
     }
 

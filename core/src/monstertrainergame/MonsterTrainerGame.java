@@ -19,6 +19,7 @@ import monstertrainergame.model.MonsterType;
 import monstertrainergame.view.ResourceManager;
 import monstertrainergame.view.Skin;
 import monstertrainergame.view.View;
+import static monstertrainergame.model.Ability.Type.*;
 
 public class MonsterTrainerGame extends ApplicationAdapter {
     private ResourceManager resources;
@@ -63,12 +64,14 @@ public class MonsterTrainerGame extends ApplicationAdapter {
 
         // Add player monsters
         Monster monster = new Monster(firedragon, true);
-        monster.getAbilities().add(new Ability("Fireball"));
+        monster.getAbilities().add(new Ability("Fireball", PROJECTILE));
         battle.add(new FieldedMonster(monster, cx - 4, cy - 4));
         Monster monster2 = new Monster(seawyrm, true);
-        monster2.getAbilities().add(new Ability("Arcane Missile"));
+        monster2.getAbilities().add(new Ability("Arcane Missile", PROJECTILE));
         battle.add(new FieldedMonster(monster2, cx - 9, cy - 2));
-        battle.add(new FieldedMonster(new Monster(serpent, true), cx - 2, cy - 8));
+        Monster monster3 = new Monster(serpent, true);
+        monster3.getAbilities().add(new Ability("Bite", MELEE));
+        battle.add(new FieldedMonster(monster3, cx - 2, cy - 8));
 
         // Add opponent monsters
         battle.add(new FieldedMonster(new Monster(mudwalker, false), cx + 4, cy + 1));

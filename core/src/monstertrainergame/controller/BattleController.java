@@ -10,6 +10,7 @@ import monstertrainergame.model.Ability;
 import monstertrainergame.model.Battle;
 import monstertrainergame.model.FieldedMonster;
 import static monstertrainergame.controller.BattleController.Interaction.*;
+import static monstertrainergame.model.Ability.Type.MELEE;
 
 public class BattleController {
     // Owned
@@ -54,7 +55,7 @@ public class BattleController {
         target = battle.getMonsterAt(x, y);
         if (target != null && target.isOwnedByPlayer()) {
             return SELECT;
-        } else if (target != null && ability != null && !selected.hasPerformedAbility()) {
+        } else if (canPerformSelectedAbility()) {
             return ABILITY;
         } else if (selected != null) {
             pathfinder.determineMovementDestinationTowards(selected, x, y, destination);
@@ -62,6 +63,17 @@ public class BattleController {
         } else {
             return NONE;
         }
+    }
+
+    private boolean canPerformSelectedAbility() {
+        return target != null && ability != null && !selected.hasPerformedAbility()
+                && !(ability.getType() == MELEE && !withinMeleeRange());
+    }
+
+    private boolean withinMeleeRange() {
+        float minimum = selected.getRadius() + target.getRadius();
+        float distance2 = selected.getPosition().dst2(target.getPosition());
+        return distance2 < minimum * minimum * (1 + 1e-5f); // Accommodate for floating point errors;
     }
 
     public void cancel() {
@@ -77,9 +89,7 @@ public class BattleController {
         EventDispatcher.instance.dispatch(new EndTurnEvent());
 
         //TODO execute AI turn
-        for (FieldedMonster monster : battle.getOpponents()) {
-            EventDispatcher.instance.dispatch(new MoveEvent(monster, new Vector2(52, 36)));
-        }
+        EventDispatcher.instance.dispatch(new MoveEvent(battle.getOpponents().get(0), new Vector2(52, 36)));
 
         // Fire event for new player turn
         EventDispatcher.instance.dispatch(new StartTurnEvent());
