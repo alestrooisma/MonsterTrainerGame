@@ -1,5 +1,6 @@
 package monstertrainergame.view;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 
@@ -14,6 +15,9 @@ public class TweenEngine {
         add(target, destination.x, destination.y, destination.z, speed);
     }
 
+    public void add(Color target, Color destination, float duration) {
+        actions.add(new ColorTweenAction(target, destination.r, destination.g, destination.b, destination.a, duration));
+    }
     public void add(Callback callback, Object payload) {
         actions.add(new CallbackAction(callback, payload));
     }
@@ -55,6 +59,31 @@ public class TweenEngine {
 
             if (Math.abs(velocity.x * dt) < Math.abs(destination.x - target.x)) {
                 target.add(velocity.x * dt, velocity.y * dt, velocity.z * dt);
+                return false;
+            } else {
+                target.set(destination);
+                return true;
+            }
+        }
+    }
+
+    public static class ColorTweenAction implements Action {
+        // Owned
+        private final Color destination = new Color();
+        private float duration;
+        // Not owned
+        private final Color target;
+
+        public ColorTweenAction(Color target, float r, float g, float b, float a, float duration) {
+            this.target = target;
+            this.destination.set(r, g, b, a);
+            this.duration = duration;
+        }
+
+        public boolean update(float dt) {
+            if (dt < duration) {
+                target.lerp(destination, dt / duration);
+                duration -= dt;
                 return false;
             } else {
                 target.set(destination);

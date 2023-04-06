@@ -241,6 +241,7 @@ public class BattleLayer extends AbstractLayer {
                     animator.animateProjectileAbility(event);
                     break;
             }
+            animator.animateDeath(event.getTarget());
         }
 
         @Override
@@ -251,6 +252,7 @@ public class BattleLayer extends AbstractLayer {
     }
 
     private class AbilityAnimator implements TweenEngine.Callback {
+        private final Color invisiblack = new Color(0, 0, 0, 0);
         private final Vector3 origin = new Vector3();
         private final Vector3 target = new Vector3();
 
@@ -292,6 +294,12 @@ public class BattleLayer extends AbstractLayer {
             Element e = findElement(monster);
             Rectangle bounds = e.getSkin().getBounds();
             return bounds.y + bounds.height / 2;
+        }
+
+        public void animateDeath(FieldedMonster target) {
+            Element e = findElement(target);
+            engine.add(e.getTint(), invisiblack, 0.8f);
+            engine.add(this, e);
         }
 
         @Override

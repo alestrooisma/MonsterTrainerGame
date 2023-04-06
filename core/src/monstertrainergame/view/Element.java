@@ -1,11 +1,13 @@
 package monstertrainergame.view;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import monstertrainergame.model.FieldedMonster;
 
 public class Element {
     // Owned
+    private final Color tint = new Color(Color.WHITE);
     private final Vector3 position = new Vector3();
     private float rotation = 0;
     // Not owned
@@ -23,6 +25,18 @@ public class Element {
     public Element(FieldedMonster monster, Skin skin) {
         this.monster = monster;
         this.skin = skin;
+    }
+
+    public Color getTint() {
+        return tint;
+    }
+
+    public void setTint(Color color) {
+        setTint(color.r, color.g, color.b, color.a);
+    }
+
+    public void setTint(float r, float g, float b, float a) {
+        tint.set(r, g, b, a);
     }
 
     public Vector3 getPosition() {
@@ -54,6 +68,7 @@ public class Element {
     }
 
     public void draw(SpriteBatch batch) {
+        batch.setColor(tint);
         skin.draw(batch, position, rotation);
     }
 }
