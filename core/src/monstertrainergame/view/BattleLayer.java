@@ -92,11 +92,23 @@ public class BattleLayer extends AbstractLayer {
         batch.setProjectionMatrix(projection.getCamera().combined);
         renderer.setProjectionMatrix(projection.getCamera().combined);
 
+        renderIndicators();
+        renderElements();
+    }
+
+    private void renderIndicators() {
+        // Prepare rendering
+        renderer.begin(ShapeRenderer.ShapeType.Line);
+
+        // Render various indicators
+        renderSelectionIndicator();
         renderInteractionIndicators();
         if (debug) {
             renderDebugLines();
         }
-        renderElements();
+
+        // Finalize rendering
+        renderer.end();
     }
 
     private void renderInteractionIndicators() {
@@ -106,10 +118,8 @@ public class BattleLayer extends AbstractLayer {
 
         // Render movement indicator if applicable
         if (interaction == MOVE || interaction == MOVE_AND_ABILITY) {
-            renderer.begin(ShapeRenderer.ShapeType.Line);
             renderer.setColor(Color.WHITE);
             renderEllipse(controller.getDestination(), controller.getSelected().getRadius());
-            renderer.end();
         }
     }
 
@@ -120,9 +130,6 @@ public class BattleLayer extends AbstractLayer {
         // Render all elements (with decoration)
         elements.sort(reverseYComparator);
         for (Element e : elements) {
-            if (e.getMonster() == controller.getSelected()) {
-                renderIndicators(e);
-            }
             e.draw(batch);
         }
 
@@ -130,20 +137,16 @@ public class BattleLayer extends AbstractLayer {
         batch.end();
     }
 
-    private void renderIndicators(Element e) {
-        // Finalize batch drawing and prepare shape rendering
-        batch.end();
-        renderer.begin(ShapeRenderer.ShapeType.Line);
+    private void renderSelectionIndicator() {
+        if (controller.getSelected() != null) {
+            Element e = findElement(controller.getSelected());
 
-        // Render indicators
-        renderer.setColor(Color.WHITE);
-        renderFootprint(e);
-        renderer.setColor(Color.GRAY);
-        renderMovementRange(e);
+            renderer.setColor(Color.WHITE);
+            renderFootprint(e);
 
-        // Finalize shape rendering and resume batch drawing
-        renderer.end();
-        batch.begin();
+            renderer.setColor(Color.GRAY);
+            renderMovementRange(e);
+        }
     }
 
     private void renderFootprint(Element e) {
