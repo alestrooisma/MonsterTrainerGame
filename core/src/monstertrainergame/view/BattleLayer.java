@@ -64,6 +64,15 @@ public class BattleLayer extends AbstractLayer {
         }
     }
 
+    public Element findElement(FieldedMonster monster) {
+        for (Element e : elements) {
+            if (e.getMonster() == monster) {
+                return e;
+            }
+        }
+        return null;
+    }
+
     @Override
     public void update(float dt) {
         // Handle camera controls
@@ -116,21 +125,6 @@ public class BattleLayer extends AbstractLayer {
         renderer.end();
     }
 
-    private void renderInteractionIndicators() {
-        // Determine interaction if player clicked at current mouse position
-        projection.screenToWorldCoordinates(Gdx.input.getX(), Gdx.input.getY(), world);
-        Interaction interaction = controller.determineInteraction(world);
-
-        // Render movement indicator if applicable
-        if (interaction == MOVE || interaction == MOVE_AND_ABILITY) {
-            projection.worldToPixelCoordinates(controller.getDestination(), pixel);
-
-            renderer.setColor(Color.WHITE);
-            renderer.ellipse(pixel, controller.getSelected().getRadius());
-            renderer.arrow(selected.getPosition(), pixel, 20f, 10f);
-        }
-    }
-
     private void renderElements() {
         // Prepare drawing
         batch.begin();
@@ -155,12 +149,19 @@ public class BattleLayer extends AbstractLayer {
         }
     }
 
-    private void renderFootprint(Element e) {
-        renderer.ellipse(e.getPosition(), e.getMonster().getRadius());
-    }
+    private void renderInteractionIndicators() {
+        // Determine interaction if player clicked at current mouse position
+        projection.screenToWorldCoordinates(Gdx.input.getX(), Gdx.input.getY(), world);
+        Interaction interaction = controller.determineInteraction(world);
 
-    private void renderMovementRange(Element e) {
-        renderer.ellipse(e.getPosition(), e.getMonster().getRemainingMovementRange());
+        // Render movement indicator if applicable
+        if (interaction == MOVE || interaction == MOVE_AND_ABILITY) {
+            projection.worldToPixelCoordinates(controller.getDestination(), pixel);
+
+            renderer.setColor(Color.WHITE);
+            renderer.ellipse(pixel, controller.getSelected().getRadius());
+            renderer.arrow(selected.getPosition(), pixel, 20f, 10f);
+        }
     }
 
     private void renderDebugLines() {
@@ -175,10 +176,12 @@ public class BattleLayer extends AbstractLayer {
         }
     }
 
-    @Override
-    public void dispose() {
-        batch.dispose();
-        renderer.dispose();
+    private void renderFootprint(Element e) {
+        renderer.ellipse(e.getPosition(), e.getMonster().getRadius());
+    }
+
+    private void renderMovementRange(Element e) {
+        renderer.ellipse(e.getPosition(), e.getMonster().getRemainingMovementRange());
     }
 
     @Override
@@ -186,13 +189,10 @@ public class BattleLayer extends AbstractLayer {
         return inputProcessor;
     }
 
-    public Element findElement(FieldedMonster monster) {
-        for (Element e : elements) {
-            if (e.getMonster() == monster) {
-                return e;
-            }
-        }
-        return null;
+    @Override
+    public void dispose() {
+        batch.dispose();
+        renderer.dispose();
     }
 
     private class BattleLayerInputProcessor extends InputAdapter {
