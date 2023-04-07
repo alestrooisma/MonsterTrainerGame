@@ -34,7 +34,7 @@ public class BattleLayer extends AbstractLayer {
     private final TweenEngine engine = new TweenEngine();
     private final AbilityAnimator animator = new AbilityAnimator();
     private final ReverseYComparator reverseYComparator = new ReverseYComparator();
-    private final ShapeRenderer renderer = new ShapeRenderer();
+    private final ProjectedShapeRenderer renderer;
     private final SpriteBatch batch = new SpriteBatch();
     private final Array<Element> elements = new Array<>();
     private boolean debug = false;
@@ -44,10 +44,6 @@ public class BattleLayer extends AbstractLayer {
     private final Projection projection;
     private final CameraController cameraController;
     // Utilities
-    private final Vector3 ellipseCenter = new Vector3();
-    private final Vector3 ellipseAxes = new Vector3();
-    private final Vector3 arrowBase = new Vector3();
-    private final Vector3 arrowYield = new Vector3();
     private final Vector3 pixel = new Vector3();
     private final Vector2 world = new Vector2();
     private Element selected = null;
@@ -56,6 +52,7 @@ public class BattleLayer extends AbstractLayer {
         this.controller = controller;
         this.projection = projection;
         this.cameraController = cameraController;
+        this.renderer = new ProjectedShapeRenderer(projection);
         EventDispatcher.instance.register(new BattleLayerEventListener());
     }
 
@@ -126,19 +123,12 @@ public class BattleLayer extends AbstractLayer {
 
         // Render movement indicator if applicable
         if (interaction == MOVE || interaction == MOVE_AND_ABILITY) {
+            projection.worldToPixelCoordinates(controller.getDestination(), pixel);
+
             renderer.setColor(Color.WHITE);
-            renderEllipse(controller.getDestination(), controller.getSelected().getRadius());
-            renderArrow(selected.getPosition(), ellipseCenter, 20, 10);
+            renderer.ellipse(pixel, controller.getSelected().getRadius());
+            renderer.arrow(selected.getPosition(), pixel, 20f, 10f);
         }
-    }
-
-    private void renderArrow(Vector3 from, Vector3 to, float length, float width) {
-        arrowBase.set(from).sub(to).nor().scl(length).add(to);
-        arrowYield.set(to).sub(from).nor().rotate(90, 0, 0, 1).scl(width);
-
-        renderer.line(from, to);
-        renderer.line(to, pixel.set(arrowBase).sub(arrowYield));
-        renderer.line(to, pixel.set(arrowBase).add(arrowYield));
     }
 
     private void renderElements() {
@@ -166,21 +156,11 @@ public class BattleLayer extends AbstractLayer {
     }
 
     private void renderFootprint(Element e) {
-        renderEllipse(e.getPosition(), e.getMonster().getRadius());
+        renderer.ellipse(e.getPosition(), e.getMonster().getRadius());
     }
 
     private void renderMovementRange(Element e) {
-        renderEllipse(e.getPosition(), e.getMonster().getRemainingMovementRange());
-    }
-
-    private void renderEllipse(Vector2 center, float radiusInWorldCoordinates) {
-        projection.worldToPixelCoordinates(center, ellipseCenter);
-        renderEllipse(ellipseCenter, radiusInWorldCoordinates);
-    }
-
-    private void renderEllipse(Vector3 center, float radiusInWorldCoordinates) {
-        projection.worldToPixelCoordinates(radiusInWorldCoordinates, radiusInWorldCoordinates, ellipseAxes);
-        renderer.ellipse(center.x - ellipseAxes.x, center.y - ellipseAxes.y, ellipseAxes.x * 2, ellipseAxes.y * 2);
+        renderer.ellipse(e.getPosition(), e.getMonster().getRemainingMovementRange());
     }
 
     private void renderDebugLines() {
@@ -190,7 +170,7 @@ public class BattleLayer extends AbstractLayer {
         // Render debug lines for all elements
         for (Element e : elements) {
             Rectangle bounds = e.getSkin().getBounds();
-            renderer.rect(e.getPosition().x + bounds.x, e.getPosition().y + bounds.y, bounds.width, bounds.height);
+            renderer.rectangle(bounds, e.getPosition());
             renderFootprint(e);
         }
     }
@@ -198,6 +178,7 @@ public class BattleLayer extends AbstractLayer {
     @Override
     public void dispose() {
         batch.dispose();
+        renderer.dispose();
     }
 
     @Override
