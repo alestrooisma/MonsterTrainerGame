@@ -1,16 +1,20 @@
 package monstertrainergame.controller;
 
 import com.badlogic.gdx.math.Vector2;
+import static monstertrainergame.controller.BattleController.Interaction.ABILITY;
+import static monstertrainergame.controller.BattleController.Interaction.MOVE;
+import static monstertrainergame.controller.BattleController.Interaction.MOVE_AND_ABILITY;
+import static monstertrainergame.controller.BattleController.Interaction.NONE;
+import static monstertrainergame.controller.BattleController.Interaction.SELECT;
 import monstertrainergame.events.AbilityEvent;
 import monstertrainergame.events.EndTurnEvent;
 import monstertrainergame.events.EventDispatcher;
 import monstertrainergame.events.MoveEvent;
 import monstertrainergame.events.StartTurnEvent;
 import monstertrainergame.model.Ability;
+import static monstertrainergame.model.Ability.Type.MELEE;
 import monstertrainergame.model.Battle;
 import monstertrainergame.model.FieldedMonster;
-import static monstertrainergame.controller.BattleController.Interaction.*;
-import static monstertrainergame.model.Ability.Type.MELEE;
 
 public class BattleController {
     // Owned
@@ -35,9 +39,17 @@ public class BattleController {
         return selected;
     }
 
+    public Vector2 getDestination() {
+        return destination;
+    }
+
     public void interact(float x, float y) {
         Interaction interaction = determineInteraction(x, y);
         performInteraction(interaction);
+    }
+
+    public Interaction determineInteraction(Vector2 location) {
+        return determineInteraction(location.x, location.y);
     }
 
     public Interaction determineInteraction(float x, float y) {

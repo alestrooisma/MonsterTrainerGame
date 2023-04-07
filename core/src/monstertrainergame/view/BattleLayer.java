@@ -16,6 +16,9 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import java.util.Comparator;
 import monstertrainergame.controller.BattleController;
+import monstertrainergame.controller.BattleController.Interaction;
+import static monstertrainergame.controller.BattleController.Interaction.MOVE;
+import static monstertrainergame.controller.BattleController.Interaction.MOVE_AND_ABILITY;
 import monstertrainergame.controller.CameraController;
 import monstertrainergame.events.AbilityEvent;
 import monstertrainergame.events.EndTurnEvent;
@@ -41,6 +44,8 @@ public class BattleLayer extends AbstractLayer {
     private final Projection projection;
     private final CameraController cameraController;
     // Utilities
+    private final Vector3 ellipseCenter = new Vector3();
+    private final Vector3 ellipseAxes = new Vector3();
     private final Vector3 pixel = new Vector3();
     private final Vector2 world = new Vector2();
 
@@ -87,10 +92,25 @@ public class BattleLayer extends AbstractLayer {
         batch.setProjectionMatrix(projection.getCamera().combined);
         renderer.setProjectionMatrix(projection.getCamera().combined);
 
+        renderInteractionIndicators();
         if (debug) {
             renderDebugLines();
         }
         renderElements();
+    }
+
+    private void renderInteractionIndicators() {
+        // Determine interaction if player clicked at current mouse position
+        projection.screenToWorldCoordinates(Gdx.input.getX(), Gdx.input.getY(), world);
+        Interaction interaction = controller.determineInteraction(world);
+
+        // Render movement indicator if applicable
+        if (interaction == MOVE || interaction == MOVE_AND_ABILITY) {
+            renderer.begin(ShapeRenderer.ShapeType.Line);
+            renderer.setColor(Color.WHITE);
+            renderEllipse(controller.getDestination(), controller.getSelected().getRadius());
+            renderer.end();
+        }
     }
 
     private void renderElements() {
@@ -134,9 +154,14 @@ public class BattleLayer extends AbstractLayer {
         renderEllipse(e.getPosition(), e.getMonster().getRemainingMovementRange());
     }
 
+    private void renderEllipse(Vector2 center, float radiusInWorldCoordinates) {
+        projection.worldToPixelCoordinates(center, ellipseCenter);
+        renderEllipse(ellipseCenter, radiusInWorldCoordinates);
+    }
+
     private void renderEllipse(Vector3 center, float radiusInWorldCoordinates) {
-        projection.worldToPixelCoordinates(radiusInWorldCoordinates, radiusInWorldCoordinates, pixel);
-        renderer.ellipse(center.x - pixel.x, center.y - pixel.y, pixel.x * 2, pixel.y * 2);
+        projection.worldToPixelCoordinates(radiusInWorldCoordinates, radiusInWorldCoordinates, ellipseAxes);
+        renderer.ellipse(center.x - ellipseAxes.x, center.y - ellipseAxes.y, ellipseAxes.x * 2, ellipseAxes.y * 2);
     }
 
     private void renderDebugLines() {
