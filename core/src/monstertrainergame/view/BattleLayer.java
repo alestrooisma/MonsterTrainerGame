@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.Array;
 import java.util.Comparator;
 import monstertrainergame.controller.BattleController;
 import monstertrainergame.controller.BattleController.Interaction;
+import static monstertrainergame.controller.BattleController.Interaction.ABILITY;
 import static monstertrainergame.controller.BattleController.Interaction.MOVE;
 import static monstertrainergame.controller.BattleController.Interaction.MOVE_AND_ABILITY;
 import monstertrainergame.controller.CameraController;
@@ -159,6 +160,13 @@ public class BattleLayer extends AbstractLayer {
             renderer.setColor(Color.WHITE);
             renderer.ellipse(controller.getDestination(), controller.getSelected().getRadius());
             renderer.arrow(controller.getSelected().getPosition(), controller.getDestination(), 0.6f, 0.3f);
+        }
+
+        // Render attack indicator if applicable
+        if (interaction == ABILITY || interaction == MOVE_AND_ABILITY) {
+            renderer.setColor(Color.RED);
+            renderer.ellipse(controller.getTarget().getPosition(), controller.getTarget().getRadius());
+            renderer.arrow(controller.getDestination(), controller.getTarget().getPosition(), 0.6f, 0.3f);
         }
     }
 

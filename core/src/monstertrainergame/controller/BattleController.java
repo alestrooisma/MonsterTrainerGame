@@ -39,6 +39,10 @@ public class BattleController {
         return selected;
     }
 
+    public FieldedMonster getTarget() {
+        return target;
+    }
+
     public Vector2 getDestination() {
         return destination;
     }
@@ -54,11 +58,15 @@ public class BattleController {
 
     public Interaction determineInteraction(float x, float y) {
         target = battle.getMonsterAt(x, y);
+
         if (target != null && target != selected && target.isOwnedByPlayer()) {
+            destination.set(target.getPosition());
             return SELECT;
         } else if (canPerformSelectedAbility()) {
+            destination.set(selected.getPosition());
             return ABILITY;
         } else if (canMoveToPerformSelectedAbility()) {
+            // destination gets set in function called by canMoveToPerformSelectedAbility()
             return MOVE_AND_ABILITY;
         } else if (selected != null) {
             pathfinder.determineMovementDestinationTowards(selected, x, y, destination);
