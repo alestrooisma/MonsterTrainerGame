@@ -42,7 +42,7 @@ public class BattleController {
 
     public Interaction determineInteraction(float x, float y) {
         target = battle.getMonsterAt(x, y);
-        if (target != null && target.isOwnedByPlayer()) {
+        if (target != null && target != selected && target.isOwnedByPlayer()) {
             return SELECT;
         } else if (canPerformSelectedAbility()) {
             return ABILITY;
@@ -76,13 +76,16 @@ public class BattleController {
     }
 
     private boolean canPerformSelectedAbility() {
-        return target != null && ability != null && !selected.hasPerformedAbility()
-                && !(ability.getType() == MELEE && !withinMeleeRange());
+        return canPerformAbilityPreChecks() && !(ability.getType() == MELEE && !withinMeleeRange());
     }
 
     private boolean canMoveToPerformSelectedAbility() {
-        return target != null && ability != null && !selected.hasPerformedAbility()
-                && ability.getType() == MELEE && canMoveWithinMeleeRange();
+        return canPerformAbilityPreChecks() && ability.getType() == MELEE && canMoveWithinMeleeRange();
+    }
+
+    private boolean canPerformAbilityPreChecks() {
+        return selected != null && target != null && ability != null
+                && !selected.hasPerformedAbility() && !target.isOwnedByPlayer();
     }
 
     private boolean withinMeleeRange() {
