@@ -184,8 +184,7 @@ public class BattleLayer extends AbstractLayer {
     }
 
     private void renderDebugLines() {
-        // Prepare drawing
-        renderer.begin(ShapeRenderer.ShapeType.Line);
+        // Set debug color
         renderer.setColor(Color.PINK);
 
         // Render debug lines for all elements
@@ -194,9 +193,6 @@ public class BattleLayer extends AbstractLayer {
             renderer.rect(e.getPosition().x + bounds.x, e.getPosition().y + bounds.y, bounds.width, bounds.height);
             renderFootprint(e);
         }
-
-        // Finalize drawing
-        renderer.end();
     }
 
     @Override
