@@ -156,11 +156,9 @@ public class BattleLayer extends AbstractLayer {
 
         // Render movement indicator if applicable
         if (interaction == MOVE || interaction == MOVE_AND_ABILITY) {
-            projection.worldToPixelCoordinates(controller.getDestination(), pixel);
-
             renderer.setColor(Color.WHITE);
-            renderer.ellipse(pixel, controller.getSelected().getRadius());
-            renderer.arrow(selected.getPosition(), pixel, 20f, 10f);
+            renderer.ellipse(controller.getDestination(), controller.getSelected().getRadius());
+            renderer.arrow(controller.getSelected().getPosition(), controller.getDestination(), 0.6f, 0.3f);
         }
     }
 

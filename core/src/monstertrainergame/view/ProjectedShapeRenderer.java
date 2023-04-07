@@ -18,11 +18,13 @@ public class ProjectedShapeRenderer implements Disposable {
     // Not owned
     private final Projection projection;
     // Utilities
+    private final Vector3 from3 = new Vector3();
+    private final Vector3 to3 = new Vector3();
     private final Vector3 ellipseCenter = new Vector3();
     private final Vector3 ellipseAxes = new Vector3();
-    private final Vector3 arrowHeadBase = new Vector3();
-    private final Vector3 arrowHeadWidth = new Vector3();
-    private final Vector3 vec3 = new Vector3();
+    private final Vector2 arrowHeadBase = new Vector2();
+    private final Vector2 arrowHeadWidth = new Vector2();
+    private final Vector2 vec2 = new Vector2();
 
     public ProjectedShapeRenderer(Projection projection) {
         this.projection = projection;
@@ -44,6 +46,21 @@ public class ProjectedShapeRenderer implements Disposable {
         renderer.end();
     }
 
+    public void line(Vector2 from, Vector2 to) {
+        projection.worldToPixelCoordinates(from, from3);
+        projection.worldToPixelCoordinates(to, to3);
+        renderer.line(from3, to3);
+    }
+
+    public void line(Vector2 from, Vector3 to) {
+        projection.worldToPixelCoordinates(from, from3);
+        renderer.line(from3, to);
+    }
+
+    public void rectangle(Rectangle rect, Vector3 offset) {
+        renderer.rect(offset.x + rect.x, offset.y + rect.y, rect.width, rect.height);
+    }
+
     public void ellipse(Vector2 center, float radiusInWorldCoordinates) {
         projection.worldToPixelCoordinates(center, ellipseCenter);
         ellipse(ellipseCenter, radiusInWorldCoordinates);
@@ -58,17 +75,13 @@ public class ProjectedShapeRenderer implements Disposable {
         renderer.ellipse(center.x - axes.x, center.y - axes.y, axes.x * 2, axes.y * 2);
     }
 
-    public void arrow(Vector3 from, Vector3 to, float length, float width) {
+    public void arrow(Vector2 from, Vector2 to, float length, float width) {
         arrowHeadBase.set(from).sub(to).nor().scl(length).add(to);
-        arrowHeadWidth.set(to).sub(from).nor().rotate(90, 0, 0, 1).scl(width);
+        arrowHeadWidth.set(to).sub(from).nor().rotateDeg(90).scl(width);
 
-        renderer.line(from, to);
-        renderer.line(to, vec3.set(arrowHeadBase).sub(arrowHeadWidth));
-        renderer.line(to, vec3.set(arrowHeadBase).add(arrowHeadWidth));
-    }
-
-    public void rectangle(Rectangle rect, Vector3 offset) {
-        renderer.rect(offset.x + rect.x, offset.y + rect.y, rect.width, rect.height);
+        line(from, to);
+        line(vec2.set(arrowHeadBase).sub(arrowHeadWidth), to3); // Don't recalculate to3
+        line(vec2.set(arrowHeadBase).add(arrowHeadWidth), to3); // Don't recalculate to3
     }
 
     @Override
