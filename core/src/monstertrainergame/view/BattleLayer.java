@@ -179,7 +179,7 @@ public class BattleLayer extends AbstractLayer {
     }
 
     private void renderMovementRange(Element e) {
-        renderer.ellipse(e.getPosition(), e.getMonster().getRemainingMovementRange());
+        renderer.ellipse(e.getPosition(), e.getMonster().getRadius() + e.getMonster().getRemainingMovementRange());
     }
 
     @Override
