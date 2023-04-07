@@ -46,6 +46,8 @@ public class BattleLayer extends AbstractLayer {
     // Utilities
     private final Vector3 ellipseCenter = new Vector3();
     private final Vector3 ellipseAxes = new Vector3();
+    private final Vector3 arrowBase = new Vector3();
+    private final Vector3 arrowYield = new Vector3();
     private final Vector3 pixel = new Vector3();
     private final Vector2 world = new Vector2();
     private Element selected = null;
@@ -126,7 +128,17 @@ public class BattleLayer extends AbstractLayer {
         if (interaction == MOVE || interaction == MOVE_AND_ABILITY) {
             renderer.setColor(Color.WHITE);
             renderEllipse(controller.getDestination(), controller.getSelected().getRadius());
+            renderArrow(selected.getPosition(), ellipseCenter, 20, 10);
         }
+    }
+
+    private void renderArrow(Vector3 from, Vector3 to, float length, float width) {
+        arrowBase.set(from).sub(to).nor().scl(length).add(to);
+        arrowYield.set(to).sub(from).nor().rotate(90, 0, 0, 1).scl(width);
+
+        renderer.line(from, to);
+        renderer.line(to, pixel.set(arrowBase).sub(arrowYield));
+        renderer.line(to, pixel.set(arrowBase).add(arrowYield));
     }
 
     private void renderElements() {
