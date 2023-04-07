@@ -48,6 +48,7 @@ public class BattleLayer extends AbstractLayer {
     private final Vector3 ellipseAxes = new Vector3();
     private final Vector3 pixel = new Vector3();
     private final Vector2 world = new Vector2();
+    private Element selected = null;
 
     public BattleLayer(BattleController controller, Projection projection, CameraController cameraController) {
         this.controller = controller;
@@ -89,9 +90,14 @@ public class BattleLayer extends AbstractLayer {
 
     @Override
     public void render() {
+        // Apply camera settings
         batch.setProjectionMatrix(projection.getCamera().combined);
         renderer.setProjectionMatrix(projection.getCamera().combined);
 
+        // Find selected element only once
+        selected = controller.getSelected() != null ? findElement(controller.getSelected()) : null;
+
+        // Perform actual rendering
         renderIndicators();
         renderElements();
     }
@@ -138,14 +144,12 @@ public class BattleLayer extends AbstractLayer {
     }
 
     private void renderSelectionIndicator() {
-        if (controller.getSelected() != null) {
-            Element e = findElement(controller.getSelected());
-
+        if (selected != null) {
             renderer.setColor(Color.WHITE);
-            renderFootprint(e);
+            renderFootprint(selected);
 
             renderer.setColor(Color.GRAY);
-            renderMovementRange(e);
+            renderMovementRange(selected);
         }
     }
 
