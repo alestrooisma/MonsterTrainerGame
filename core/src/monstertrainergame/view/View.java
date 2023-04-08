@@ -40,6 +40,9 @@ public class View implements Disposable {
         // Add the battle layer
         battleLayer = new BattleLayer(controller, projection, cameraController);
         view.add(battleLayer);
+
+        // Add the battle HUD
+        view.add(new BattleHudLayer(controller));
     }
 
     public LayeredView getView() {

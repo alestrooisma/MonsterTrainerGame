@@ -35,12 +35,20 @@ public class BattleController {
         return battle;
     }
 
-    public FieldedMonster getSelected() {
+    public FieldedMonster getSelectedMonster() {
         return selected;
     }
 
     public FieldedMonster getTarget() {
         return target;
+    }
+
+    public void selectAbility(Ability ability) {
+        this.ability = ability;
+    }
+
+    public Ability getSelectedAbility() {
+        return ability;
     }
 
     public Vector2 getDestination() {
@@ -80,7 +88,7 @@ public class BattleController {
         switch (interaction) {
             case SELECT:
                 selected = target;
-                ability = selected.getAbilities().isEmpty() ? null : selected.getAbilities().first();
+                ability = null;
                 break;
             case MOVE:
                 EventDispatcher.instance.dispatch(new MoveEvent(selected, destination));
@@ -130,6 +138,7 @@ public class BattleController {
     public void endTurn() {
         // Clear any relevant state in this controller
         selected = null;
+        ability = null;
 
         // Fire end turn event
         EventDispatcher.instance.dispatch(new EndTurnEvent());

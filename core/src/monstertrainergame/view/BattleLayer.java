@@ -104,7 +104,7 @@ public class BattleLayer extends AbstractLayer {
         renderer.setProjectionMatrix(projection.getCamera().combined);
 
         // Find selected element only once
-        selected = controller.getSelected() != null ? findElement(controller.getSelected()) : null;
+        selected = controller.getSelectedMonster() != null ? findElement(controller.getSelectedMonster()) : null;
 
         // Perform actual rendering
         renderIndicators();
@@ -158,8 +158,8 @@ public class BattleLayer extends AbstractLayer {
         // Render movement indicator if applicable
         if (interaction == MOVE || interaction == MOVE_AND_ABILITY) {
             renderer.setColor(Color.WHITE);
-            renderer.ellipse(controller.getDestination(), controller.getSelected().getRadius());
-            renderer.arrow(controller.getSelected().getPosition(), controller.getDestination(), 0.6f, 0.3f);
+            renderer.ellipse(controller.getDestination(), controller.getSelectedMonster().getRadius());
+            renderer.arrow(controller.getSelectedMonster().getPosition(), controller.getDestination(), 0.6f, 0.3f);
         }
 
         // Render attack indicator if applicable
