@@ -56,23 +56,24 @@ public class MonsterTrainerGame extends ApplicationAdapter {
         Battle battle = new Battle(bounds);
 
         // Create monster types
-        MonsterType firedragon = new MonsterType("Fire Dragon", 48/25f, 5);
+        MonsterType firewraith = new MonsterType("Fire Wraith", 25/25f, 5);
         MonsterType seawyrm = new MonsterType("Sea Wyrm", 30/25f, 6);
-        MonsterType serpent = new MonsterType("Serpent", 28/25f, 7);
+        MonsterType icemonax = new MonsterType("Icemonax", 35/25f, 7);
         MonsterType mudwalker = new MonsterType("Mudwalker", 24/25f, 4);
         MonsterType mudcrawler = new MonsterType("Mudcrawler", 19/25f, 3);
 
         // Add player monsters
-        Monster monster = new Monster(firedragon, true);
-        monster.getAbilities().add(new Ability("Bite", MELEE));
+        Monster monster = new Monster(firewraith, true);
+        monster.getAbilities().add(new Ability("Slash", MELEE));
         monster.getAbilities().add(new Ability("Fireball", PROJECTILE));
-        battle.add(new FieldedMonster(monster, cx - 4, cy - 4));
+        battle.add(new FieldedMonster(monster, cx - 6, cy - 6));
         Monster monster2 = new Monster(seawyrm, true);
         monster2.getAbilities().add(new Ability("Bite", MELEE));
         monster2.getAbilities().add(new Ability("Arcane Missile", PROJECTILE));
-        battle.add(new FieldedMonster(monster2, cx - 9, cy - 2));
-        Monster monster3 = new Monster(serpent, true);
-        monster3.getAbilities().add(new Ability("Bite", MELEE));
+        battle.add(new FieldedMonster(monster2, cx - 7, cy - 0));
+        Monster monster3 = new Monster(icemonax, true);
+        monster3.getAbilities().add(new Ability("Slam", MELEE));
+        monster3.getAbilities().add(new Ability("Tail Whip", MELEE));
         battle.add(new FieldedMonster(monster3, cx - 2, cy - 8));
 
         // Add opponent monsters
@@ -85,9 +86,9 @@ public class MonsterTrainerGame extends ApplicationAdapter {
 
     private static ResourceManager loadResources() {
         ResourceManager resources = ResourceManager.create();
-        resources.add("Fire Dragon", createMonsterSkin("fire-dragon.png", 94, 72, 8, 46, 140, 154));
-        resources.add("Sea Wyrm", createMonsterSkin("seaserpent.png", 34, 26, 4, 2, 66, 70));
-        resources.add("Serpent", createMonsterSkin("water-serpent.png", 36, 20, 6, 7, 60, 53));
+        resources.add("Fire Wraith", createMonsterSkin("firewraith.png", 34, 5, 9, 5, 51, 62));
+        resources.add("Sea Wyrm", createMonsterSkin("seaserpent.png", 34, 22, 4, 2, 66, 70));
+        resources.add("Icemonax", createMonsterSkin("great-icemonax.png", 58, 31, 0, 15, 93, 64));
         resources.add("Mudwalker", createMonsterSkin("giant-mudcrawler.png", 37, 21, 8, 7, 52, 48));
         resources.add("Mudcrawler", createMonsterSkin("mudcrawler.png", 35, 18, 16, 11, 38, 23));
         resources.add("Fireball", createProjectileSkin("fireball-n.png", 49, 63));
