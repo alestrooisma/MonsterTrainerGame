@@ -20,6 +20,7 @@ import monstertrainergame.controller.BattleController.Interaction;
 import static monstertrainergame.controller.BattleController.Interaction.ABILITY;
 import static monstertrainergame.controller.BattleController.Interaction.MOVE;
 import static monstertrainergame.controller.BattleController.Interaction.MOVE_AND_ABILITY;
+import static monstertrainergame.controller.BattleController.Interaction.SELECT;
 import monstertrainergame.controller.CameraController;
 import monstertrainergame.events.AbilityEvent;
 import monstertrainergame.events.EndTurnEvent;
@@ -154,6 +155,13 @@ public class BattleLayer extends AbstractLayer {
         // Determine interaction if player clicked at current mouse position
         projection.screenToWorldCoordinates(Gdx.input.getX(), Gdx.input.getY(), world);
         Interaction interaction = controller.determineInteraction(world);
+
+        // Render selection interaction indicator if applicable
+        if (interaction == SELECT) {
+            renderer.setColor(Color.WHITE);
+            Element e = findElement(controller.getTarget());
+            renderFootprint(e);
+        }
 
         // Render movement indicator if applicable
         if (interaction == MOVE || interaction == MOVE_AND_ABILITY) {
