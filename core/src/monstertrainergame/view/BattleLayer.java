@@ -75,6 +75,27 @@ public class BattleLayer extends AbstractLayer {
         return null;
     }
 
+    private FieldedMonster getMonsterAt(Vector3 pixel) {
+        Element e = getElementAt(pixel);
+        return e != null ? e.getMonster() : null;
+    }
+
+    private Element getElementAt(Vector3 pixel) {
+        Element touchedElement = null;
+
+        // Iterate the elements in reverse to get the topmost element
+        // for which the coordinates are in its skin's bounding box.
+        for (int i = elements.size - 1; touchedElement == null && i >= 0; i--) {
+            Element e = elements.get(i);
+            if (e.contains(pixel.x, pixel.y)) {
+                touchedElement = e;
+            }
+        }
+
+        // Return the topmost element at (x, y), which may be null
+        return touchedElement;
+    }
+
     @Override
     public void update(float dt) {
         // Handle camera controls
@@ -153,8 +174,9 @@ public class BattleLayer extends AbstractLayer {
 
     private void renderInteractionIndicators() {
         // Determine interaction if player clicked at current mouse position
-        projection.screenToWorldCoordinates(Gdx.input.getX(), Gdx.input.getY(), world);
-        Interaction interaction = controller.determineInteraction(world);
+        projection.screenToPixelCoordinates(Gdx.input.getX(), Gdx.input.getY(), pixel);
+        projection.pixelToWorldCoordinates(pixel, world);
+        Interaction interaction = controller.determineInteraction(world, getMonsterAt(pixel));
 
         // Render selection interaction indicator if applicable
         if (interaction == SELECT) {
@@ -217,8 +239,9 @@ public class BattleLayer extends AbstractLayer {
             }
 
             if (button == Input.Buttons.LEFT) {
-                projection.screenToWorldCoordinates(screenX, screenY, world);
-                controller.interact(world.x, world.y);
+                projection.screenToPixelCoordinates(screenX, screenY, pixel);
+                projection.pixelToWorldCoordinates(pixel, world);
+                controller.interact(world.x, world.y, getMonsterAt(pixel));
             } else if (button == Input.Buttons.RIGHT) {
                 controller.cancel();
             } else {

@@ -55,17 +55,21 @@ public class BattleController {
         return destination;
     }
 
-    public void interact(float x, float y) {
-        Interaction interaction = determineInteraction(x, y);
+    public void interact(float x, float y, FieldedMonster monster) {
+        Interaction interaction = determineInteraction(x, y, monster);
         performInteraction(interaction);
     }
 
-    public Interaction determineInteraction(Vector2 location) {
-        return determineInteraction(location.x, location.y);
+    public Interaction determineInteraction(Vector2 location, FieldedMonster monster) {
+        return determineInteraction(location.x, location.y, monster);
     }
 
-    public Interaction determineInteraction(float x, float y) {
-        target = battle.getMonsterAt(x, y);
+    public Interaction determineInteraction(float x, float y, FieldedMonster monster) {
+        if (monster != null) {
+            target = monster;
+        } else {
+            target = battle.getMonsterAt(x, y);
+        }
 
         if (target != null && target != selected && target.isOwnedByPlayer()) {
             destination.set(target.getPosition());
