@@ -1,5 +1,7 @@
 package monstertrainergame.controller;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
 import static monstertrainergame.controller.BattleController.Interaction.ABILITY;
 import static monstertrainergame.controller.BattleController.Interaction.MOVE;
@@ -65,7 +67,7 @@ public class BattleController {
     }
 
     public Interaction determineInteraction(float x, float y, FieldedMonster monster) {
-        if (monster != null) {
+        if (monster != null && !Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {
             target = monster;
         } else {
             target = battle.getMonsterAt(x, y);
