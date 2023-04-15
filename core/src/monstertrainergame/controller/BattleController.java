@@ -60,6 +60,9 @@ public class BattleController {
     public void interact(float x, float y, FieldedMonster monster) {
         Interaction interaction = determineInteraction(x, y, monster);
         performInteraction(interaction);
+        if (isTurnCompleted()) {
+            endTurn();
+        }
     }
 
     public Interaction determineInteraction(Vector2 location, FieldedMonster monster) {
@@ -109,6 +112,15 @@ public class BattleController {
         }
     }
 
+    private boolean isTurnCompleted() {
+        for (FieldedMonster monster : battle.getFieldedMonsters()) {
+            if (!monster.isSkipped() && !monster.hasPerformedAbility()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private boolean canPerformSelectedAbility() {
         return canPerformAbilityPreChecks() && !(ability.getType() == MELEE && !withinMeleeRange());
     }
@@ -137,14 +149,22 @@ public class BattleController {
     }
 
     public void cancel() {
-        selected = null;
-        ability = null;
+        deselect();
+    }
+
+    public void skip() {
+        if (selected != null) {
+            selected.skip();
+            deselect();
+            if (isTurnCompleted()) {
+                endTurn();
+            }
+        }
     }
 
     public void endTurn() {
         // Clear any relevant state in this controller
-        selected = null;
-        ability = null;
+        deselect();
 
         // Fire end turn event
         EventDispatcher.instance.dispatch(new EndTurnEvent());
@@ -154,6 +174,11 @@ public class BattleController {
 
         // Fire event for new player turn
         EventDispatcher.instance.dispatch(new StartTurnEvent());
+    }
+
+    private void deselect() {
+        selected = null;
+        ability = null;
     }
 
     public enum Interaction {

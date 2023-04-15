@@ -111,6 +111,9 @@ public class BattleHudLayer extends AbstractLayer {
                 case Keys.NUM_4:
                     controller.selectAbility(selectedMonster.getAbilities().get(keycode - Keys.NUM_1));
                     return true;
+                case Keys.SPACE:
+                    controller.skip();
+                    return true;
                 default:
                     return false;
             }

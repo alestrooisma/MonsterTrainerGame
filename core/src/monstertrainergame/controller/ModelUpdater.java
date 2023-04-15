@@ -22,7 +22,7 @@ public class ModelUpdater implements EventListener {
     @Override
     public void handleEndTurnEvent(EndTurnEvent event) {
         for (FieldedMonster monster : battle.getFieldedMonsters()) {
-            monster.endTurn();
+            monster.reset();
         }
     }
 

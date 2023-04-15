@@ -10,6 +10,7 @@ public class FieldedMonster {
     private float currentHealth;
     private float distanceMovedThisTurn = 0;
     private boolean performedAbility = false;
+    private boolean skippedTurn = false;
 
     public FieldedMonster(Monster monster, float x, float y) {
         this(monster, new Vector2(x, y));
@@ -45,6 +46,14 @@ public class FieldedMonster {
         return monster.getMaxHealth();
     }
 
+    public boolean isSkipped() {
+        return skippedTurn;
+    }
+
+    public void skip() {
+        skippedTurn = true;
+    }
+
     public float getCurrentHealth() {
         return currentHealth;
     }
@@ -78,9 +87,10 @@ public class FieldedMonster {
         this.performedAbility = performedAbility;
     }
 
-    public void endTurn() {
+    public void reset() {
         distanceMovedThisTurn = 0;
         performedAbility = false;
+        skippedTurn = false;
     }
 
     public boolean occupies(float x, float y) {
