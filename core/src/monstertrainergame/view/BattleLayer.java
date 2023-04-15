@@ -36,9 +36,10 @@ import monstertrainergame.model.FieldedMonster;
 public class BattleLayer extends AbstractLayer {
     // Owned
     private final InputProcessor inputProcessor = new BattleLayerInputProcessor();
-    private final TweenEngine engine = new TweenEngine();
     private final AbilityAnimator animator = new AbilityAnimator();
+    private final SelectionCallback selectionCallback = new SelectionCallback();
     private final ReverseYComparator reverseYComparator = new ReverseYComparator();
+    private final TweenEngine engine = new TweenEngine();
     private final ProjectedShapeRenderer renderer;
     private final SpriteBatch batch = new SpriteBatch();
     private final Texture white;
@@ -53,6 +54,7 @@ public class BattleLayer extends AbstractLayer {
     private final Vector3 pixel = new Vector3();
     private final Vector2 world = new Vector2();
     private Element selected = null;
+    private boolean pendingSelection = false;
 
     public BattleLayer(BattleController controller, Projection projection, CameraController cameraController) {
         this.controller = controller;
@@ -139,8 +141,14 @@ public class BattleLayer extends AbstractLayer {
         batch.setProjectionMatrix(projection.getCamera().combined);
         renderer.setProjectionMatrix(projection.getCamera().combined);
 
-        // Find selected element only once
-        selected = controller.getSelectedMonster() != null ? findElement(controller.getSelectedMonster()) : null;
+        // Trigger selection change callback if needed
+        if (!pendingSelection && (
+                (selected == null && controller.getSelectedMonster() != null) ||
+                (selected != null && selected.getMonster() != controller.getSelectedMonster()))) {
+            selected = null;
+            engine.add(selectionCallback, null);
+            pendingSelection = true;
+        }
 
         // Perform actual rendering
         renderIndicators();
@@ -227,11 +235,16 @@ public class BattleLayer extends AbstractLayer {
             renderFootprint(e);
         }
 
+        // Need selected monster for the following part
+        if (selected == null) {
+            return;
+        }
+
         // Render movement indicator if applicable
         if (interaction == MOVE || interaction == MOVE_AND_ABILITY) {
             renderer.setColor(Color.WHITE);
-            renderer.ellipse(controller.getDestination(), controller.getSelectedMonster().getRadius());
-            renderer.arrow(controller.getSelectedMonster().getPosition(), controller.getDestination(), 0.6f, 0.3f);
+            renderer.ellipse(controller.getDestination(), selected.getMonster().getRadius());
+            renderer.arrow(selected.getMonster().getPosition(), controller.getDestination(), 0.6f, 0.3f);
         }
 
         // Render attack indicator if applicable
@@ -320,6 +333,7 @@ public class BattleLayer extends AbstractLayer {
 
         @Override
         public void handleEndTurnEvent(EndTurnEvent event) {
+            selected = null;
             playerTurn = false;
         }
 
@@ -411,6 +425,14 @@ public class BattleLayer extends AbstractLayer {
         @Override
         public void callback(Object payload) {
             elements.removeValue((Element) payload, true);
+        }
+    }
+
+    private class SelectionCallback implements TweenEngine.Callback {
+        @Override
+        public void callback(Object payload) {
+            selected = controller.getSelectedMonster() != null ? findElement(controller.getSelectedMonster()) : null;
+            pendingSelection = false;
         }
     }
 
