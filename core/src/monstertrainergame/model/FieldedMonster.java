@@ -1,6 +1,5 @@
 package monstertrainergame.model;
 
-import com.badlogic.gdx.math.MathUtils;
 import static com.badlogic.gdx.math.MathUtils.clamp;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -19,7 +18,7 @@ public class FieldedMonster {
     public FieldedMonster(Monster monster, Vector2 position) {
         this.monster = monster;
         this.position = position;
-        this.currentHealth = MathUtils.random(1f, getMaxHealth()); // TODO start at full health
+        this.currentHealth = getMaxHealth();
     }
 
     public String getTypeName() {
@@ -52,6 +51,10 @@ public class FieldedMonster {
 
     public void setCurrentHealth(float health) {
         currentHealth = clamp(0, health, getMaxHealth());
+    }
+
+    public void reduceHealth(float damage) {
+        setCurrentHealth(currentHealth - damage);
     }
 
     public float getRemainingMovementRange() {

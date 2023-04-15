@@ -34,7 +34,6 @@ public class ModelUpdater implements EventListener {
     @Override
     public void handleAbilityEvent(AbilityEvent event) {
         event.getMonster().setPerformedAbility(true);
-        // TODO actually apply damage etc
-        event.getTarget().setCurrentHealth(0);
+        event.getTarget().reduceHealth(event.getAbility().getDamage());
     }
 }

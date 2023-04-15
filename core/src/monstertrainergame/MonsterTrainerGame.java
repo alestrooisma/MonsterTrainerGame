@@ -56,24 +56,24 @@ public class MonsterTrainerGame extends ApplicationAdapter {
         Battle battle = new Battle(bounds);
 
         // Create monster types
-        MonsterType firewraith = new MonsterType("Fire Wraith", 25/25f, 5, 100);
+        MonsterType firewraith = new MonsterType("Fire Wraith", 25/25f, 5, 80);
         MonsterType seawyrm = new MonsterType("Sea Wyrm", 30/25f, 6, 100);
-        MonsterType icemonax = new MonsterType("Icemonax", 35/25f, 7, 100);
+        MonsterType icemonax = new MonsterType("Icemonax", 35/25f, 7, 120);
         MonsterType mudwalker = new MonsterType("Mudwalker", 24/25f, 4, 100);
-        MonsterType mudcrawler = new MonsterType("Mudcrawler", 19/25f, 3, 100);
+        MonsterType mudcrawler = new MonsterType("Mudcrawler", 19/25f, 3, 75);
 
         // Add player monsters
         Monster monster = new Monster(firewraith, true);
-        monster.getAbilities().add(new Ability("Slash", MELEE));
-        monster.getAbilities().add(new Ability("Fireball", PROJECTILE));
+        monster.getAbilities().add(new Ability("Slash", MELEE, 20));
+        monster.getAbilities().add(new Ability("Fireball", PROJECTILE, 50));
         battle.add(new FieldedMonster(monster, cx - 6, cy - 6));
         Monster monster2 = new Monster(seawyrm, true);
-        monster2.getAbilities().add(new Ability("Bite", MELEE));
-        monster2.getAbilities().add(new Ability("Arcane Missile", PROJECTILE));
+        monster2.getAbilities().add(new Ability("Bite", MELEE, 30));
+        monster2.getAbilities().add(new Ability("Arcane Missile", PROJECTILE, 20));
         battle.add(new FieldedMonster(monster2, cx - 7, cy - 0));
         Monster monster3 = new Monster(icemonax, true);
-        monster3.getAbilities().add(new Ability("Slam", MELEE));
-        monster3.getAbilities().add(new Ability("Tail Whip", MELEE));
+        monster3.getAbilities().add(new Ability("Slam", MELEE, 40));
+        monster3.getAbilities().add(new Ability("Tail Whip", MELEE, 25));
         battle.add(new FieldedMonster(monster3, cx - 2, cy - 8));
 
         // Add opponent monsters
