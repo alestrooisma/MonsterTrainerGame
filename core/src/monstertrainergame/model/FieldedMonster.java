@@ -1,11 +1,13 @@
 package monstertrainergame.model;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 public class FieldedMonster {
     private final Monster monster;
     private final Vector2 position;
+    private final float currentHealth;
     private float distanceMovedThisTurn = 0;
     private boolean performedAbility = false;
 
@@ -16,6 +18,7 @@ public class FieldedMonster {
     public FieldedMonster(Monster monster, Vector2 position) {
         this.monster = monster;
         this.position = position;
+        this.currentHealth = MathUtils.random(1f, getMaxHealth()); // TODO start at full health
     }
 
     public String getTypeName() {
@@ -36,6 +39,14 @@ public class FieldedMonster {
 
     public Vector2 getPosition() {
         return position;
+    }
+
+    public float getMaxHealth() {
+        return monster.getMaxHealth();
+    }
+
+    public float getCurrentHealth() {
+        return currentHealth;
     }
 
     public float getRemainingMovementRange() {

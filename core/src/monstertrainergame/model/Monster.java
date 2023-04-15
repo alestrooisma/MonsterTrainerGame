@@ -36,4 +36,8 @@ public class Monster {
     public float getMaxMovementRange() {
         return type.getMaxMovementRange();
     }
+
+    public float getMaxHealth() {
+        return type.getMaxHealth();
+    }
 }

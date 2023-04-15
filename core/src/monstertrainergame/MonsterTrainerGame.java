@@ -56,11 +56,11 @@ public class MonsterTrainerGame extends ApplicationAdapter {
         Battle battle = new Battle(bounds);
 
         // Create monster types
-        MonsterType firewraith = new MonsterType("Fire Wraith", 25/25f, 5);
-        MonsterType seawyrm = new MonsterType("Sea Wyrm", 30/25f, 6);
-        MonsterType icemonax = new MonsterType("Icemonax", 35/25f, 7);
-        MonsterType mudwalker = new MonsterType("Mudwalker", 24/25f, 4);
-        MonsterType mudcrawler = new MonsterType("Mudcrawler", 19/25f, 3);
+        MonsterType firewraith = new MonsterType("Fire Wraith", 25/25f, 5, 100);
+        MonsterType seawyrm = new MonsterType("Sea Wyrm", 30/25f, 6, 100);
+        MonsterType icemonax = new MonsterType("Icemonax", 35/25f, 7, 100);
+        MonsterType mudwalker = new MonsterType("Mudwalker", 24/25f, 4, 100);
+        MonsterType mudcrawler = new MonsterType("Mudcrawler", 19/25f, 3, 100);
 
         // Add player monsters
         Monster monster = new Monster(firewraith, true);

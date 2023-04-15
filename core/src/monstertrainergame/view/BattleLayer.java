@@ -7,9 +7,12 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import static com.badlogic.gdx.math.MathUtils.ceil;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -38,6 +41,7 @@ public class BattleLayer extends AbstractLayer {
     private final ReverseYComparator reverseYComparator = new ReverseYComparator();
     private final ProjectedShapeRenderer renderer;
     private final SpriteBatch batch = new SpriteBatch();
+    private final Texture white;
     private final Array<Element> elements = new Array<>();
     private boolean debug = false;
     private boolean playerTurn = false;
@@ -55,7 +59,17 @@ public class BattleLayer extends AbstractLayer {
         this.projection = projection;
         this.cameraController = cameraController;
         this.renderer = new ProjectedShapeRenderer(projection);
+        white = createSinglePixelTexture();
         EventDispatcher.instance.register(new BattleLayerEventListener());
+    }
+
+    private Texture createSinglePixelTexture() {
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.WHITE);
+        pixmap.fill();
+        Texture texture = new Texture(pixmap);
+        pixmap.dispose();
+        return texture;
     }
 
     public void add(Element e) {
@@ -156,10 +170,36 @@ public class BattleLayer extends AbstractLayer {
         elements.sort(reverseYComparator);
         for (Element e : elements) {
             e.draw(batch);
+            drawHealthBar(e);
         }
 
         // Finalize drawing
         batch.end();
+    }
+
+    private void drawHealthBar(Element e) {
+        Rectangle bounds = e.getSkin().getBounds();
+
+        // Calculate full bar sizes
+        float width = 50;
+        float height = 5;
+        float x = e.getPosition().x - width / 2;
+        float y = e.getPosition().y + bounds.y + bounds.height + 5;
+
+        // Calculate bar fill with
+        float healthFraction = e.getMonster().getCurrentHealth() / e.getMonster().getMaxHealth();
+        float fillWidth = ceil((width - 2) * healthFraction);
+
+        // Draw the health bar box
+        batch.setColor(Color.BLACK);
+        batch.draw(white, x, y, width, 1);
+        batch.draw(white, x, y + height - 1, width, 1);
+        batch.draw(white, x, y, 1, height);
+        batch.draw(white, x + width - 1, y, 1, height);
+
+        // Draw the health bar itself
+        batch.setColor(Color.RED);
+        batch.draw(white, x + 1, y + 1, fillWidth, height - 2);
     }
 
     private void renderSelectionIndicator() {
@@ -227,6 +267,7 @@ public class BattleLayer extends AbstractLayer {
 
     @Override
     public void dispose() {
+        white.dispose();
         batch.dispose();
         renderer.dispose();
     }
