@@ -114,6 +114,9 @@ public class BattleHudLayer extends AbstractLayer {
                 case Keys.SPACE:
                     controller.skip();
                     return true;
+                case Keys.TAB:
+                    controller.next();
+                    return true;
                 default:
                     return false;
             }

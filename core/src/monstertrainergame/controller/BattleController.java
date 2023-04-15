@@ -96,8 +96,7 @@ public class BattleController {
     private void performInteraction(Interaction interaction) {
         switch (interaction) {
             case SELECT:
-                selected = target;
-                ability = null;
+                select(target);
                 break;
             case MOVE:
                 EventDispatcher.instance.dispatch(new MoveEvent(selected, destination));
@@ -114,11 +113,15 @@ public class BattleController {
 
     private boolean isTurnCompleted() {
         for (FieldedMonster monster : battle.getFieldedMonsters()) {
-            if (!monster.isSkipped() && !monster.hasPerformedAbility()) {
+            if (canAct(monster)) {
                 return false;
             }
         }
         return true;
+    }
+
+    private boolean canAct(FieldedMonster monster) {
+        return !monster.isSkipped() && !monster.hasPerformedAbility();
     }
 
     private boolean canPerformSelectedAbility() {
@@ -162,6 +165,17 @@ public class BattleController {
         }
     }
 
+    public void next() {
+        int index = 0;
+        if (selected != null) {
+            index = battle.getFieldedMonsters().indexOf(selected, true);
+            do {
+                index = (index + 1) % battle.getFieldedMonsters().size;
+            } while (!canAct(battle.getFieldedMonsters().get(index)));
+        }
+        select(index);
+    }
+
     public void endTurn() {
         // Clear any relevant state in this controller
         deselect();
@@ -174,6 +188,15 @@ public class BattleController {
 
         // Fire event for new player turn
         EventDispatcher.instance.dispatch(new StartTurnEvent());
+    }
+
+    private void select(int index) {
+        select(battle.getFieldedMonsters().get(index));
+    }
+
+    private void select(FieldedMonster monster) {
+        selected = monster;
+        ability = null;
     }
 
     private void deselect() {
