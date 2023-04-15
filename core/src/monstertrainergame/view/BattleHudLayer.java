@@ -4,8 +4,8 @@ import aetherdriven.view.AbstractLayer;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.StringBuilder;
 import monstertrainergame.controller.BattleController;
 import monstertrainergame.model.Ability;
@@ -64,12 +64,21 @@ public class BattleHudLayer extends AbstractLayer {
 
     @Override
     public void render() {
+        // Can't draw if no monster is selected
         if (selectedMonster == null) {
             return;
         }
 
+        // Gray out the text when the monster has already performed an ability
+        if (selectedMonster.hasPerformedAbility()) {
+            textRenderer.setColor(Color.GRAY);
+        } else {
+            textRenderer.setColor(Color.WHITE);
+        }
+
+        // Do the actual rendering
         batch.begin();
-        if (selectedAbilityIndex >= 0) {
+        if (selectedAbilityIndex >= 0 && !selectedMonster.hasPerformedAbility()) {
             textRenderer.draw(">", 10, determineY(selectedAbilityIndex));
         }
         textRenderer.draw(text.toString(), 25, determineY(0));
