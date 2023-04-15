@@ -170,7 +170,9 @@ public class BattleLayer extends AbstractLayer {
         elements.sort(reverseYComparator);
         for (Element e : elements) {
             e.draw(batch);
-            drawHealthBar(e);
+            if (e.getMonster() != null && e.getMonster().getCurrentHealth() > 0) {
+                drawHealthBar(e);
+            }
         }
 
         // Finalize drawing
@@ -332,6 +334,7 @@ public class BattleLayer extends AbstractLayer {
 
         @Override
         public void handleAbilityEvent(AbilityEvent event) {
+            // Animate the ability
             switch (event.getAbility().getType()) {
                 case MELEE:
                     animator.animateMeleeAbility(event);
@@ -340,7 +343,11 @@ public class BattleLayer extends AbstractLayer {
                     animator.animateProjectileAbility(event);
                     break;
             }
-            animator.animateDeath(event.getTarget());
+
+            // Animate target death if applicable
+            if (event.getTarget().getCurrentHealth() == 0) {
+                animator.animateDeath(event.getTarget());
+            }
         }
 
         @Override
