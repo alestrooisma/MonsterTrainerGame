@@ -62,6 +62,8 @@ public class BattleController {
         performInteraction(interaction);
         if (isTurnCompleted()) {
             endTurn();
+        } else if (!canAct(selected)) {
+            next();
         }
     }
 
@@ -158,9 +160,10 @@ public class BattleController {
     public void skip() {
         if (selected != null) {
             selected.skip();
-            deselect();
             if (isTurnCompleted()) {
                 endTurn();
+            } else {
+                next();
             }
         }
     }
