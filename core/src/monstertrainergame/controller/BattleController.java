@@ -191,6 +191,9 @@ public class BattleController {
 
         // Fire event for new player turn
         EventDispatcher.instance.dispatch(new StartTurnEvent());
+
+        // Select first monster
+        next();
     }
 
     private void select(int index) {
