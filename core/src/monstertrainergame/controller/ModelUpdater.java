@@ -33,7 +33,15 @@ public class ModelUpdater implements EventListener {
 
     @Override
     public void handleAbilityEvent(AbilityEvent event) {
+        // Update acting monster
         event.getMonster().setPerformedAbility(true);
+
+        // Update target
         event.getTarget().reduceHealth(event.getAbility().getDamage());
+
+        // Remove target from battle if killed
+        if (event.getTarget().getCurrentHealth() == 0) {
+            battle.remove(event.getTarget());
+        }
     }
 }

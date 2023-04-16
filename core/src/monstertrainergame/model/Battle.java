@@ -33,6 +33,14 @@ public class Battle implements Iterable<FieldedMonster> {
         }
     }
 
+    public void remove(FieldedMonster monster) {
+        if (monster.isOwnedByPlayer()) {
+            fieldedMonsters.removeValue(monster, true);
+        } else {
+            opponents.removeValue(monster, true);
+        }
+    }
+
     public Rectangle getBounds() {
         return bounds;
     }
